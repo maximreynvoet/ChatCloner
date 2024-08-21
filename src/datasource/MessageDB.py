@@ -26,3 +26,7 @@ class MessageDB:
         messages = [MessengerMessageReader.read_messages_from_json(f) for f in JsonRepo.get_all_messenger_jsons_files()]
         flattened = [m for sublist in messages for m in sublist]
         return MessageDB(flattened)
+    
+    def get_all_text(self) -> str:
+        "Generates all the text from all messages (useful for making tokenizer)"
+        return "\n".join([m.content for m in self._messages])
