@@ -4,6 +4,7 @@ from typing import List
 
 from datatypes.Person import Person
 from datatypes.Token import Token
+from other.tokenizer import Tokenizer 
 
 @dataclass
 class DataPoint:
@@ -20,11 +21,11 @@ class DataPoint:
 class ConversationParser:
     conversation: List[Message]
 
-    def parse(self, N) -> List[DataPoint]:
+    def parse(self, N : int, tokenizer : Tokenizer) -> List[DataPoint]:
         context_window : List[Token] = []
         conversation_tokens : List[DataPoint] = []
-        prev_talker : Person = Person(0)
-        curr_talker : Person = Person(0)
+        prev_talker : Person = Person("None")
+        curr_talker : Person = Person("None")
         time_talked : int = 0
 
         for message in self.conversation:
@@ -33,10 +34,11 @@ class ConversationParser:
             if message.talker != curr_talker:
                 prev_talker = curr_talker
                 curr_talker = Person(message.talker)
+                time_talked = 0
             else:
                 time_talked += 1
 
-            curr_tokens : List[Token] = tokenize(message.content)
+            curr_tokens : List[Token] = tokenizer.sentence_to_tokens(message.content)
 
             for curr_token in curr_tokens: 
                 
