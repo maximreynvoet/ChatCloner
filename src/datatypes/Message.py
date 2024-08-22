@@ -4,4 +4,4 @@ from dataclasses import dataclass
 @dataclass
 class Message:
     content: str
-    talker: str # TODO omvormen naar persoon      
+    talker: str # TODO omvormen naar persoon

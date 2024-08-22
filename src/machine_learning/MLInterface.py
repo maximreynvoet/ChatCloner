@@ -1,17 +1,26 @@
 
+from dataclasses import dataclass
 from torch import Tensor
 import torch
 import torch.nn.functional as F
 
 
+from datatypes.Person import Person
 from datatypes.Token import Token
 from datatypes.datapoint import DataPoint
 from other.TokenizerDB import TokenizerDB
 from other.tokenizer import Tokenizer
+from utils.utils import Utils
 
 
-class ModelFeature:
-    "Is oftewel een token oftewel een nieuwe persoon dat praat?"
+@dataclass
+class MLOutputTensor:
+    next_token_logits: Tensor
+    next_person_logits: Tensor
+
+@dataclass
+class MLInputTensor:
+    tensor: Tensor
 
 
 class MLInterface:
@@ -34,11 +43,14 @@ class MLInterface:
         else:
             return torch.concat([self._token_to_tensor(dp.current_token), self._get_empty_meta_tensor()])
     
+    def out_tensor_to_str(self, tensor: Tensor) -> str:
+        max_idx = int(torch.argmax(tensor).item())
+        if max_idx <= self._nb_tokens: return self._tokenizer.token_to_str(max_idx)
+        else: ... # TODO enkel de inpus of output idk moet weg byeee
+    
     def _token_to_tensor(self, token: Token) -> Tensor:
         "One hot encoding van tensor op de plaats van de token"
-        t = torch.zeros(self._nb_tokens)
-        t[token] = 1
-        return t
+        return Utils.get_one_hot_tensor(self._nb_tokens, token)
     
     def _get_empty_token_tensor(self) -> Tensor:
         return torch.zeros(self._nb_tokens)
@@ -46,14 +58,24 @@ class MLInterface:
     def _get_empty_meta_tensor(self) -> Tensor:
         return torch.zeros(self._nb_meta_features)
 
-    def _datapoint_to_meta_feature(self, dp: DataPoint) -> Tensor:
+    def _datapoint_to_meta_feature_out(self, dp: DataPoint) -> Tensor:
+        # Fack, aja ik kan gewoon ook double prediction doen
+        # Model geeft zowel token als next talker
+        ...
+
+
+    def _datapoint_to_meta_feature_in(self, dp: DataPoint) -> Tensor:
+        # TODO split met meta in en meta uit (in heeft time talked, out niet)
         """Returns a tensor that contains all features but the previous tokens.
         This includes the time talked, and who the current talker is"""
+        return self._person_to_tensor(dp.current_talker) + self._time_talked_tensor(dp.time_talked)
+    
+    def _time_talked_tensor(self, time_talked) -> Tensor:
+        return torch.tensor([time_talked])
+        
+    def _person_to_tensor(self, person: Person) -> Tensor:
         talker_int = ... # TODO swarchen
         nb_people = ... # TODO swarchen
         
         one_hot = F.one_hot(torch.tensor([talker_int]), num_classes=nb_people).squeeze(0)
-        integer_tensor = torch.tensor([dp.time_talked], dtype=one_hot.dtype)
-        return torch.concat((integer_tensor, one_hot))
-        
-
+        ...
