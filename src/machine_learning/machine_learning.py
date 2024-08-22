@@ -1,4 +1,5 @@
 from typing import List
+import numpy as np
 import torch
 import torch.nn.functional as F
 import torch.nn as nn
@@ -22,6 +23,12 @@ class TextPredictor:
         self._nb_features_in  = nb_features_in
         self._nb_features_out = nb_features_out
 
+    def train_model(self) -> None:
+        raise NotImplementedError()
+    
+    def predict_token_logits(self, input_tensor: torch.Tensor) -> torch.Tensor:
+        raise NotImplementedError()
+
 class BoWModel(TextPredictor, nn.Module):
     "Simple bag of words model"
 
@@ -36,3 +43,10 @@ class BoWModel(TextPredictor, nn.Module):
             x = layer(x)
         x = self._out_layer(x)
         return F.softmax(x)
+    
+    def predict_token_logits(self, input_tensor: torch.Tensor) -> torch.Tensor:
+        return self.forward(input_tensor)
+    
+    def train_model(self) -> None:
+        ...
+    

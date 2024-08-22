@@ -1,27 +1,13 @@
-from tokenizers import Tokenizer, models, pre_tokenizers, trainers, processors
-
 from typing import List
-from datasource.MessageDB import MessageDB
 from datatypes.Token import Token
+from other.TokenizerDB import TokenizerDB
 
-
-
-class TokenizerDB:
-    @staticmethod
-    def get_saved_instance(path: str) -> Tokenizer:
+class Tokenizer:
+    def sentence_to_tokens(self, sentence: str) -> List[Token]:
         ...
 
-    @staticmethod
-    def save_instance(instance: Tokenizer, path: str) -> None:
+    def token_to_str(self, token: Token) -> str:
         ...
-
-    @staticmethod
-    def generate_instance(max_tokens: int) -> Tokenizer:
-        tokenizer = Tokenizer(models.BPE())
-        trainer = trainers.BpeTrainer(vocab_size=max_tokens)
-        texts = MessageDB.get_instance().get_all_text()
-        tokenizer.train_from_iterator(texts, trainer=trainer)
-        return tokenizer
 
 
 if __name__ == "__main__":
