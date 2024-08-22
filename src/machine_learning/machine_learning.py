@@ -4,6 +4,8 @@ import torch
 import torch.nn.functional as F
 import torch.nn as nn
 
+from machine_learning.MLInterface import MLInputTensor, MLOutputTensor
+
 """
 Bag of words model (simpelst)
 
@@ -26,7 +28,8 @@ class TextPredictor:
     def train_model(self) -> None:
         raise NotImplementedError()
     
-    def predict_token_logits(self, input_tensor: torch.Tensor) -> torch.Tensor:
+    # TODO hier dinges
+    def predict(self, input_tensor: MLInputTensor) -> MLOutputTensor:
         raise NotImplementedError()
 
 class BoWModel(TextPredictor, nn.Module):
@@ -44,7 +47,7 @@ class BoWModel(TextPredictor, nn.Module):
         x = self._out_layer(x)
         return F.softmax(x)
     
-    def predict_token_logits(self, input_tensor: torch.Tensor) -> torch.Tensor:
+    def predict(self, input_tensor: torch.Tensor) -> torch.Tensor:
         return self.forward(input_tensor)
     
     def train_model(self) -> None:
