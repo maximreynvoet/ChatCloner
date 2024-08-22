@@ -3,7 +3,7 @@ from datasource.MessageReader import MessengerMessageReader
 from datatypes.Message import Message
 
 
-from typing import List
+from typing import List, Set
 
 from datatypes.Person import Person
 
@@ -33,5 +33,5 @@ class MessageDB:
         "Generates all the text from all messages (useful for making tokenizer)"
         return "\n".join([m.content for m in self._messages])
     
-    def get_all_talkers(self) -> List[Person]:
-        ...
+    def get_all_talkers(self, platform : str) -> Set[Person]:
+        return set([Person.string_to_person(m.talker, platform) for m in self._messages])
