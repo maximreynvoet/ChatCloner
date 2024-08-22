@@ -5,6 +5,8 @@ from datatypes.Message import Message
 
 from typing import List
 
+from datatypes.Person import Person
+
 
 class MessageDB:
     _messages: List[Message]
@@ -30,3 +32,6 @@ class MessageDB:
     def get_all_text(self) -> str:
         "Generates all the text from all messages (useful for making tokenizer)"
         return "\n".join([m.content for m in self._messages])
+    
+    def get_all_talkers(self) -> List[Person]:
+        ...

@@ -1,14 +1,9 @@
 from Message import Message
 from dataclasses import dataclass
 from typing import List
-from enum import Enum
 
+from datatypes.Person import Person
 from datatypes.Token import Token
-
-class Person(Enum):
-    NONE = 0
-    MAXIM = 1
-    VICTOR = 2
 
 @dataclass
 class DataPoint:
@@ -18,11 +13,14 @@ class DataPoint:
     previous_talker: Person
     time_talked: int
 
+    def is_new_person_talking(self) -> bool:
+        return self.time_talked == 0 # TODO klopt dit? Maak test
+
 @dataclass
 class ConversationParser:
     conversation: List[Message]
 
-    def parse(self, N):
+    def parse(self, N) -> List[DataPoint]:
         context_window : List[Token] = []
         conversation_tokens : List[DataPoint] = []
         prev_talker : Person = Person(0)

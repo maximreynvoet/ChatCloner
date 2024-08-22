@@ -15,7 +15,7 @@ class TokenizerDB:
         ...
 
     @staticmethod
-    def generate_instance(max_tokens: int) -> Tokenizer:
+    def generate_tokenizer(max_tokens: int) -> Tokenizer:
         tokenizer = Tokenizer(models.BPE())
         trainer = trainers.BpeTrainer(vocab_size=max_tokens)
         texts = MessageDB.get_instance().get_all_text()
