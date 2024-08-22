@@ -5,18 +5,21 @@ class Person(Enum):
     MAXIM = "Maxim"
     VICTOR = "Victor"
 
-    @staticmethod
-    def string_to_person(sender : str, platform : str):
+    def __init__(self, sender : str) -> None:
+        super().__init__()
+
+    @classmethod
+    def string_to_person(cls, sender : str, platform : str):
         if platform == "discord":
             
             # using nickname
             if sender == "Vico":
-                return Person("Victor")
+                return cls("Victor")
             elif sender == "CrusaderMage":
-                return Person("Maxim")
+                return cls("Maxim")
             else:
-                return Person("None")
+                return cls("None")
         else:
 
             # Facebook Messenger uses full names
-            return Person(sender.split(" ")[0])
+            return cls(sender.split(" ")[0])
