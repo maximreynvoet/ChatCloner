@@ -1,16 +1,14 @@
 from enum import Enum
 
+from datatypes.Platform import Platform
+
 class Person(Enum):
-    NONE = "None"
     MAXIM = "Maxim"
     VICTOR = "Victor"
 
-    def __init__(self, sender : str) -> None:
-        super().__init__()
-
     @classmethod
-    def string_to_person(cls, sender : str, platform : str):
-        if platform == "discord":
+    def string_to_person(cls, sender : str, platform : Platform):
+        if platform is Platform.DISCORD: # discord
             
             # using nickname
             if sender == "Vico":
@@ -18,8 +16,10 @@ class Person(Enum):
             elif sender == "CrusaderMage":
                 return cls("Maxim")
             else:
-                return cls("None")
-        else:
+                return None
+        
+        else: # messenger
 
             # Facebook Messenger uses full names
-            return cls(sender.split(" ")[0])
+            firstname = sender.split(" ")[0]
+            return (cls(firstname) if firstname in ["Maxim","Victor"] else None)

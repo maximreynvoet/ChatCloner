@@ -1,6 +1,6 @@
 from Message import Message
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 from datatypes.Person import Person
 from datatypes.Token import Token
@@ -10,8 +10,8 @@ from other.tokenizer import Tokenizer
 class DataPoint:
     prev_tokens: List[Token]
     current_token: Token # TODO remember dat current token een user is als er juist een switch gebeurd is (of andere manier om user change te modelleren)
-    current_talker: Person
-    previous_talker: Person
+    current_talker: Optional[Person]
+    previous_talker: Optional[Person]
     time_talked: int
 
     def is_new_person_talking(self) -> bool:
@@ -24,8 +24,8 @@ class ConversationParser:
     def parse(self, N : int, tokenizer : Tokenizer) -> List[DataPoint]:
         context_window : List[Token] = []
         conversation_tokens : List[DataPoint] = []
-        prev_talker : Person = Person("None")
-        curr_talker : Person = Person("None")
+        prev_talker : Optional[Person] = None
+        curr_talker : Optional[Person] = None
         time_talked : int = 0
 
         for message in self.conversation:
@@ -51,5 +51,9 @@ class ConversationParser:
                 if (len(context_window)) >= N:
                     context_window.pop(0)
         
+        # set previous talker of first datapoint to current talker instead of None
+        first_dp = conversation_tokens[0]
+        first_dp.previous_talker = first_dp.current_talker
+
         return conversation_tokens        
                 
