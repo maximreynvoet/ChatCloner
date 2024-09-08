@@ -7,6 +7,7 @@ import torch.nn.functional as F
 from datatypes.Person import Person
 from datatypes.Token import Token
 from datatypes.datapoint import DataPoint
+from machine_learning.MLFeatures import BOWInputTensor
 from other.TokenizerDB import TokenizerDB
 from other.tokenizer import Tokenizer
 from utils.utils import Utils
@@ -18,7 +19,13 @@ class MLInterface:
     Ik ben van plan dit op te delen in een iets voor gwn bow models / gewoon subclassen
 
     -Victor (2024-09-08 08:40)
+
+    TODO ook moeten er hier dingen geimplementeerd worden
     
+    TODO ja dit is een grote clusterfuck aan software architectuur, ga dit zelf proberen te fixen (-V 2024-09-08)
+
+    TODO denken aan hoe er gewerkt zal worden met variable nb persons (ruimte geven voor UNK). Nodig dat de input tensors altijd cte blijven (per model).
+    Als dit cte blijft, kan nbPersons cte zijn => geen nood aan moeilijkere logica
     """
 
     def __init__(self) -> None:
@@ -26,13 +33,6 @@ class MLInterface:
         self._nb_tokens = self._tokenizer.get_nb_tokens()
         self._nb_meta_features = ... # Nb people talking + 1 (for how long)
     
-    def datapoint_to_bow_input(self, dp: DataPoint) -> Tensor:
-        token_tensors = [self._token_to_tensor(x) for x in dp.prev_tokens]
-        # TODO this is untested lol
-        token_sum = torch.sum(torch.stack(token_tensors), dim=0) 
-        meta_tensor = self._datapoint_to_meta_feature(dp)
-        return torch.concat([token_sum, meta_tensor])
-
     def datapoint_to_output(self, dp: DataPoint) -> Tensor:
         if dp.is_new_person_talking(): 
             return torch.concat([self._get_empty_token_tensor(), self._datapoint_to_meta_feature(dp)])
@@ -49,9 +49,11 @@ class MLInterface:
         return Utils.get_one_hot_tensor(self._nb_tokens, token)
     
     def _get_empty_token_tensor(self) -> Tensor:
+        "TODO make token_tensor class, replace type hints"
         return torch.zeros(self._nb_tokens)
     
     def _get_empty_meta_tensor(self) -> Tensor:
+        "TODO make meta_tensor class, replace type hints"
         return torch.zeros(self._nb_meta_features)
 
     def _datapoint_to_meta_feature_out(self, dp: DataPoint) -> Tensor:
@@ -75,3 +77,16 @@ class MLInterface:
         
         one_hot = F.one_hot(torch.tensor([talker_int]), num_classes=nb_people).squeeze(0)
         ...
+
+
+class BOWInterface(MLInterface):
+    "TODO geen idee als andere interface subclassen een goed idee is (-V 2024-09-08 08:51)"
+
+    def datapoint_to_bow_input(self, dp: DataPoint) -> BOWInputTensor:
+        "TODO of is mss constructor in tensor beter? -V 2024-09-08"
+        token_tensors = [self._token_to_tensor(x) for x in dp.prev_tokens]
+        # TODO this is untested lol
+        token_sum = torch.sum(torch.stack(token_tensors), dim=0) 
+        meta_tensor = self._datapoint_to_meta_feature(dp)
+        return torch.concat([token_sum, meta_tensor])
+    

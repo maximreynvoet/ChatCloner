@@ -10,8 +10,8 @@ from other.tokenizer import Tokenizer
 class DataPoint:
     prev_tokens: List[Token]
     current_token: Token # TODO remember dat current token een user is als er juist een switch gebeurd is (of andere manier om user change te modelleren)
-    current_talker: Optional[Person]
-    previous_talker: Optional[Person]
+    current_talker: Optional[Person] # TODO change Optional[Person] -> Person (maak gwn Unknown person die de None verandert); is veel beter voor ML / typing (-V)
+    previous_talker: Optional[Person] # TODO change Optional[Person] -> Person (maak gwn Unknown person die de None verandert); is veel beter voor ML / typing (-V)
     time_talked: int
 
     def is_new_person_talking(self) -> bool:
