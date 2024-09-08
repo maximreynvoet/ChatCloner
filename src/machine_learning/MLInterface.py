@@ -1,5 +1,4 @@
 
-from dataclasses import dataclass
 from torch import Tensor
 import torch
 import torch.nn.functional as F
@@ -11,17 +10,6 @@ from datatypes.datapoint import DataPoint
 from other.TokenizerDB import TokenizerDB
 from other.tokenizer import Tokenizer
 from utils.utils import Utils
-
-
-@dataclass
-class MLOutputTensor:
-    next_token_logits: Tensor
-    next_person_logits: Tensor
-
-@dataclass
-class MLInputTensor:
-    tensor: Tensor
-
 
 
 class MLInterface:

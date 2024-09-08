@@ -1,12 +1,12 @@
-from typing import List
 import numpy as np
-import torch
-import torch.nn.functional as F
-import torch.nn as nn
 
-from machine_learning.MLInterface import MLInputTensor, MLOutputTensor
+from machine_learning.MLFeatures import MLOutputTensor
+from machine_learning.MLFeatures import MLInputTensor
 
 """
+TODO ideas voor future models
+- Victor 2024-09-08 08:45
+
 Bag of words model (simpelst)
 
 transformer (overfitting / niet genoeg data)
@@ -32,25 +32,4 @@ class TextPredictor:
     def predict(self, input_tensor: MLInputTensor) -> MLOutputTensor:
         raise NotImplementedError()
 
-class BoWModel(TextPredictor, nn.Module):
-    "Simple bag of words model"
-
-    def __init__(self, hidden_layer_sizes: List[int], *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        layers = [self._nb_features_in] + hidden_layer_sizes
-        self._hidden_fc_layers = [nn.Linear(in_features= x, out_features=y) for x, y in zip(layers[:-1], layers[1:])]
-        self._out_layer = nn.Linear(hidden_layer_sizes[-1], self._nb_features_out)
-
-    def forward(self, x):
-        for layer in self._hidden_fc_layers:
-            x = layer(x)
-        x = self._out_layer(x)
-        
-        return F.softmax(x)
-    
-    def predict(self, input_tensor: torch.Tensor) -> torch.Tensor:
-        return self.forward(input_tensor)
-    
-    def train_model(self) -> None:
-        ...
     
