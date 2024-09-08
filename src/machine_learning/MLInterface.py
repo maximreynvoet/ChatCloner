@@ -23,7 +23,15 @@ class MLInputTensor:
     tensor: Tensor
 
 
+
 class MLInterface:
+    """
+    TODO ja ik weet dat dit niet echt in orde is, slechte software-ontwerp en al.
+    Ik ben van plan dit op te delen in een iets voor gwn bow models / gewoon subclassen
+
+    -Victor (2024-09-08 08:40)
+    
+    """
 
     def __init__(self) -> None:
         self._tokenizer = Tokenizer.get_instance()

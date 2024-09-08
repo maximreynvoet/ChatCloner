@@ -45,6 +45,7 @@ class BoWModel(TextPredictor, nn.Module):
         for layer in self._hidden_fc_layers:
             x = layer(x)
         x = self._out_layer(x)
+        
         return F.softmax(x)
     
     def predict(self, input_tensor: torch.Tensor) -> torch.Tensor:
