@@ -7,7 +7,7 @@ import torch.nn.functional as F
 from datatypes.Person import Person
 from datatypes.Token import Token
 from datatypes.datapoint import DataPoint
-from machine_learning.MLFeatures import BOWInputTensor
+from machine_learning.MLFeatures import TokenProbabilityTensor
 from other.TokenizerDB import TokenizerDB
 from other.tokenizer import Tokenizer
 from utils.utils import Utils
@@ -77,16 +77,3 @@ class MLInterface:
         
         one_hot = F.one_hot(torch.tensor([talker_int]), num_classes=nb_people).squeeze(0)
         ...
-
-
-class BOWInterface(MLInterface):
-    "TODO geen idee als andere interface subclassen een goed idee is (-V 2024-09-08 08:51)"
-
-    def datapoint_to_bow_input(self, dp: DataPoint) -> BOWInputTensor:
-        "TODO of is mss constructor in tensor beter? -V 2024-09-08"
-        token_tensors = [self._token_to_tensor(x) for x in dp.prev_tokens]
-        # TODO this is untested lol
-        token_sum = torch.sum(torch.stack(token_tensors), dim=0) 
-        meta_tensor = self._datapoint_to_meta_feature(dp)
-        return torch.concat([token_sum, meta_tensor])
-    
