@@ -8,6 +8,7 @@ HET IS ENKEL ALS JE HIER PLEZIER AAN BELEEFT DAT JE VERDER MAG WERKEN
 # TODOS
 - ML Interface maken (correcte tensor): Victor (aanzet tot)
 - Andere ML modellen (transformer based, LSTM, whatever floats your boat / je meer ervaring wilt hebben)
+- Tests maken
 
 # Interesses
 @Maxim: heb jij interesse in meer in ML leren? (Ben gwn beetje curieus -V 2024-09-09)
