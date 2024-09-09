@@ -39,7 +39,7 @@ class Utils:
         return probabilities
     
     @staticmethod
-    def sample_token(distribution: ProbabilityTensor, temperature: float) -> int:
+    def sample_logit(distribution: ProbabilityTensor, temperature: float) -> int:
         """Samples a token from the distribution with an adjusted temperature and returns the sampled index
         
         Args: 

@@ -26,6 +26,8 @@ class MLInterface:
 
     TODO denken aan hoe er gewerkt zal worden met variable nb persons (ruimte geven voor UNK). Nodig dat de input tensors altijd cte blijven (per model).
     Als dit cte blijft, kan nbPersons cte zijn => geen nood aan moeilijkere logica
+
+    TODO ook nog een ref -> nb persons / converter int -> person
     """
 
     def __init__(self) -> None:
