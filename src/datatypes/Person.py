@@ -16,6 +16,13 @@ class Person(Enum):
     NICK = "Nick"
     UNKNOWN = "Unknown"
 
+    def to_int(self)-> int:
+        return PersonManager.person_to_int(self)
+    
+    @staticmethod
+    def from_int(i: int) -> 'Person':
+        return PersonManager.int_to_person(i)
+
 class PersonManager:
     _int_mapping = {
         Person.MAXIM:   1,

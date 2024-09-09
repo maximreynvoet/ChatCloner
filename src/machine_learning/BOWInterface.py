@@ -15,11 +15,14 @@ class BOWInterface(MLInterface):
 
     def datapoint_to_bow_input(self, dp: DataPoint) -> BOWInputTensor:
         "TODO of is mss constructor in tensor beter? -V 2024-09-08"
-        token_tensors = [self._token_to_tensor(x) for x in dp.prev_tokens]
-        # TODO this is untested lol
-        token_sum = torch.sum(torch.stack(token_tensors), dim=0)
-        meta_tensor = self._datapoint_to_meta_feature(dp)
-        return torch.concat([token_sum, meta_tensor])
+        token_indices = torch.tensor(dp.prev_tokens)
+        token_counts = torch.bincount(token_indices, minlength=self._tokenizer.get_nb_tokens()).as_subclass(TokenCountTensor)
+        
+        talker_idx = dp.current_talker.to_int()
+        talker_tensor = Utils.get_one_hot_tensor(PersonManager.get_nb_persons(), talker_idx).as_subclass(TalkerTensor)
+        
+        return BOWInputTensor(token_counts, talker_tensor)
+        
     
     def get_new_input(self, previous_input: BOWInputTensor, previous_output: BOWOutputTensor, temperature: float) -> BOWInputTensor:
         """Converts the previous output into a new input        """

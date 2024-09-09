@@ -59,12 +59,8 @@ class TalkerProbabilityTensor(ProbabilityTensor):
     "Represents a probability distribution of who is talking"
 
 
-"TODO denken aan hoe de user switch zal gemodelleerd worden"
-
-
 @dataclass
 class BOWInputTensor(MLInputTensor):
-    "TODO een tensor voor token counts, en een tensor voor andere data"
     token_counts: TokenCountTensor
     talker_tensor: TalkerTensor
 
