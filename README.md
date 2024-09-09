@@ -15,3 +15,9 @@ class Person:
     name: str
 ```
 en zorgt ervoor dat je de lelijke init van velden mag overslaan xx
+
+Als je een static method zou implementeren (zoals in java), vergeet niet dat je jouw code kan / moet annoteren met `@staticmethod` en niet `self` als 1e parameter moet zetten
+
+## Help
+In vscode kan je rechts onder (bij python) auto import en type checking activeren
+Ook kan je gemakkelijk user snippets genereren
