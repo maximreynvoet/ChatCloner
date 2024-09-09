@@ -3,9 +3,19 @@ from torch import Tensor
 
 from dataclasses import dataclass
 
+"""
+Je zou kunnen zeggen dat dit beetje overbodig kan zijn zoveel types maken, maar ik deel deze mening niet. Deze types zijn nuttig om primitive obsession tegen te gaan en is duidelijker
+"""
+
+
+class ProbabilityTensor(Tensor):
+    "Tensor that represents a probability distribution"
+
+
 @dataclass
 class MLOutputTensor:
     "Base class that represents what a ML model outputs"
+
 
 @dataclass
 class MLInputTensor:
@@ -18,20 +28,25 @@ class TokenCountTensor(Tensor):
     Each element is a positive (or zero) int
     """
 
-class TokenProbabilityTensor(Tensor):
+
+class TokenProbabilityTensor(ProbabilityTensor):
     """Represents a tensor of probability of tokens
     This has fixed size of n (the number of tokens)
     Each element is a positive (or zero) float, and sums up to one
     """
 
+
 class TalkerTensor(Tensor):
     "Represents a one-hot tensor of who is talking"
 
-class TalkerProbabilityTensor(Tensor):
+
+class TalkerProbabilityTensor(ProbabilityTensor):
     "Represents a probability distribution of who is talking"
 
 
 "TODO denken aan hoe de user switch zal gemodelleerd worden"
+
+
 @dataclass
 class BOWInputTensor(MLInputTensor):
     "TODO een tensor voor token counts, en een tensor voor andere data"
@@ -40,10 +55,5 @@ class BOWInputTensor(MLInputTensor):
 
 
 class BOWOutputTensor(MLOutputTensor):
-    ...
-
-    def get_most_likely_tokens(self): ...
-
-    def sample_token(self): ...
-
-    "TODO in welke classe"
+    token_prob: TokenProbabilityTensor
+    talker_prob: TalkerProbabilityTensor

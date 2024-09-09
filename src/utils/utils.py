@@ -1,7 +1,7 @@
 from torch import Tensor
 import torch
 
-from machine_learning.MLFeatures import TokenProbabilityTensor
+from machine_learning.MLFeatures import ProbabilityTensor, TokenProbabilityTensor
 
 
 class Utils:
@@ -39,7 +39,7 @@ class Utils:
         return probabilities
     
     @staticmethod
-    def sample_token(token_distribution: TokenProbabilityTensor, temperature: float) -> int:
+    def sample_token(distribution: ProbabilityTensor, temperature: float) -> int:
         """Samples a token from the distribution with an adjusted temperature and returns the sampled index
         
         Args: 
@@ -49,6 +49,6 @@ class Utils:
                 t > 1 -> meer random (extremer / gwn noise als te veel)
         """
 
-        scaled = Utils.adjust_temperature(token_distribution, temperature)
+        scaled = Utils.adjust_temperature(distribution, temperature)
         idx = torch.multinomial(scaled, 1)
         return int(idx.item())
