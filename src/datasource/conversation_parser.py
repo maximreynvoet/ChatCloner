@@ -1,3 +1,4 @@
+from tqdm import tqdm
 from datatypes.Message import Message
 from datatypes.Person import Person
 from datatypes.Token import Token
@@ -11,10 +12,16 @@ from typing import List, Optional
 
 @dataclass
 class ConversationParser:
-    conversation: List[Message]
 
-    def parse(self, N: int, tokenizer: Tokenizer) -> List[DataPoint]:
-        """TODO afhankelijk van hoeveel datapunten er zijn => denken aan een iterator-based aanpak
+    @staticmethod
+    def parse(messages: List[Message], N: int, tokenizer: Tokenizer) -> List[DataPoint]:
+        """
+        Parses a list of messages to a collection of datapoints.
+
+        args:
+            N: the length of the sliding window (hoeveel tokens er in een datapoint mogen)
+        
+        TODO afhankelijk van hoeveel datapunten er zijn => denken aan een iterator-based aanpak
 
         Sommige NN-aanpakken kunnen meer / beter leren als de voorbeelden at random gegeven worden
 
@@ -36,11 +43,11 @@ class ConversationParser:
         """
         context_window: List[Token] = []
         conversation_tokens: List[DataPoint] = []
-        prev_talker: Optional[Person] = None
-        curr_talker: Optional[Person] = None
+        prev_talker = Person.UNKNOWN
+        curr_talker = Person.UNKNOWN
         time_talked: int = 0
 
-        for message in self.conversation:
+        for message in tqdm(messages, "Parsing messages to datapoint"):
 
             # set the previous talker
             if message.talker != curr_talker:

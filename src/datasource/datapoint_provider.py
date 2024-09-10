@@ -1,5 +1,8 @@
-from typing import Iterator
+from typing import Collection, Iterator
 
+from attr import dataclass
+
+from datasource.conversation_parser import ConversationParser
 from datatypes.datapoint import DataPoint
 from utils.MixedIterator import MixedIterator
 
@@ -14,10 +17,12 @@ class DatapointProvider(Iterator[DataPoint]):
     ...
 
 
+@dataclass
 class FixedDatapointProvider(DatapointProvider):
     """A datapoint provider that works by first generating all datapoints, and then building an iterator on top of it
     This can be stringent on the memory for bigger datasets"""
 
+    datapoints: Collection[DataPoint]
 
 class SequentialDatapointProvider(DatapointProvider):
     """Provider that does not store the dps explicitly, but generates them on the fly.
