@@ -19,7 +19,10 @@ RNN
 "TODO: Als finetuning gebruiken: https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 
 class TextPredictor:
-    "Superclass that offers methods to predict token, be able to train etc..."
+    """Superclass that offers methods to predict token, be able to train etc...
+    TODO this is probably not even needed ?
+    
+    Als dit gwn is "het neemt MLInputTensor" geeft MLOutputTensor terug", dan is dit niet zooo interessant"""
     
     def __init__(self, nb_features_in: int, nb_features_out: int) -> None:
         self._nb_features_in  = nb_features_in
@@ -28,8 +31,4 @@ class TextPredictor:
     def train_model(self) -> None:
         raise NotImplementedError()
     
-    # TODO hier dinges
-    def predict(self, input_tensor: MLInputTensor) -> MLOutputTensor:
-        raise NotImplementedError()
-
     
