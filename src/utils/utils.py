@@ -52,3 +52,5 @@ class Utils:
         scaled = Utils.adjust_temperature(distribution, temperature)
         idx = torch.multinomial(scaled, 1)
         return int(idx.item())
+
+
