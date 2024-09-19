@@ -1,3 +1,4 @@
+from typing import List
 from torch import Tensor
 import torch
 
@@ -13,7 +14,7 @@ class Utils:
     def get_one_hot_tensor(tensor_len: int, idx: int) -> OneHotTensor:
         t = torch.zeros(tensor_len)
         t[idx] = 1
-        return t
+        return t.as_subclass(OneHotTensor)
     
     @staticmethod
     def adjust_temperature(logits: torch.Tensor, temperature: float) -> torch.Tensor:
@@ -54,5 +55,19 @@ class Utils:
         scaled = Utils.adjust_temperature(distribution, temperature)
         idx = torch.multinomial(scaled, 1)
         return int(idx.item())
-
-
+    
+    @staticmethod
+    def reduce_sequence_power(start: int, end: int, power: float) -> List[int]:
+        "TODO ook een max_length van de sequence als argument (zo verbied je te lang en de NN teveel params)"
+        assert 0 < power < 1, f"The power for decreasing the sequence via a power must be between 0,1; not {power}"
+        assert start > end > 0
+        res = [start]
+        while res[-1] > end:
+            res.append(int(res[-1] ** power))
+        return res
+        
+def test_reduce_power():
+    "TODO waar moeten de testen ?"
+    s = Utils.reduce_sequence_power(64, 1, 0.5)
+    assert s == [64,32,16,8,4,2,1]
+    
