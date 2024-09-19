@@ -1,4 +1,4 @@
-from machine_learning.MLFeatures import BOWInputTensor, BOWOutputTensor
+from datatypes.tensors.ml_tensors import BOWInputTensor, BOWOutputTensor
 from machine_learning.machine_learning import TextPredictor
 
 

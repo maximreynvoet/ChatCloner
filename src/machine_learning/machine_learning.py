@@ -1,7 +1,7 @@
 import numpy as np
 
-from machine_learning.MLFeatures import MLOutputTensor
-from machine_learning.MLFeatures import MLInputTensor
+from datatypes.tensors.ml_tensors import MLOutputTensor
+from datatypes.tensors.ml_tensors import MLInputTensor
 
 """
 TODO ideas voor future models
@@ -19,16 +19,4 @@ RNN
 "TODO: Als finetuning gebruiken: https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 
 class TextPredictor:
-    """Superclass that offers methods to predict token, be able to train etc...
-    TODO this is probably not even needed ?
-    
-    Als dit gwn is "het neemt MLInputTensor" geeft MLOutputTensor terug", dan is dit niet zooo interessant"""
-    
-    def __init__(self, nb_features_in: int, nb_features_out: int) -> None:
-        self._nb_features_in  = nb_features_in
-        self._nb_features_out = nb_features_out
-
-    def train_model(self) -> None:
-        raise NotImplementedError()
-    
-    
+    ...

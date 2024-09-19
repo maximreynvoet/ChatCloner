@@ -7,7 +7,7 @@ import torch.nn.functional as F
 from datatypes.Person import Person
 from datatypes.Token import Token
 from datatypes.datapoint import DataPoint
-from machine_learning.MLFeatures import TokenProbabilityTensor
+from datatypes.tensors.use_case_tensors import TokenProbabilityTensor
 from other.TokenizerDB import TokenizerDB
 from other.tokenizer import Tokenizer
 from utils.utils import Utils
@@ -21,61 +21,17 @@ class MLInterface:
     -Victor (2024-09-08 08:40)
 
     TODO ook moeten er hier dingen geimplementeerd worden
-    
-    TODO ja dit is een grote clusterfuck aan software architectuur, ga dit zelf proberen te fixen (-V 2024-09-08)
-
-    TODO denken aan hoe er gewerkt zal worden met variable nb persons (ruimte geven voor UNK). Nodig dat de input tensors altijd cte blijven (per model).
-    Als dit cte blijft, kan nbPersons cte zijn => geen nood aan moeilijkere logica
-
-    TODO ook nog een ref -> nb persons / converter int -> person
     """
 
     def __init__(self) -> None:
         self._tokenizer = Tokenizer.get_instance()
         self._nb_tokens = self._tokenizer.get_nb_tokens()
-        self._nb_meta_features = ... # Nb people talking + 1 (for how long)
     
-    def datapoint_to_output(self, dp: DataPoint) -> Tensor:
-        if dp.is_new_person_talking(): 
-            return torch.concat([self._get_empty_token_tensor(), self._datapoint_to_meta_feature(dp)])
-        else:
-            return torch.concat([self._token_to_tensor(dp.current_token), self._get_empty_meta_tensor()])
-    
-    def out_tensor_to_str(self, tensor: Tensor) -> str:
-        max_idx = int(torch.argmax(tensor).item())
-        if max_idx <= self._nb_tokens: return self._tokenizer.token_to_str(max_idx)
-        else: ... # TODO enkel de inpus of output idk moet weg byeee
-    
-    def _token_to_tensor(self, token: Token) -> Tensor:
-        "One hot encoding van tensor op de plaats van de token"
-        return Utils.get_one_hot_tensor(self._nb_tokens, token)
-    
-    def _get_empty_token_tensor(self) -> Tensor:
-        "TODO make token_tensor class, replace type hints"
-        return torch.zeros(self._nb_tokens)
-    
-    def _get_empty_meta_tensor(self) -> Tensor:
-        "TODO make meta_tensor class, replace type hints"
-        return torch.zeros(self._nb_meta_features)
-
-    def _datapoint_to_meta_feature_out(self, dp: DataPoint) -> Tensor:
-        # Fack, aja ik kan gewoon ook double prediction doen
-        # Model geeft zowel token als next talker
+    "TODO hoe modellen van X praat (kan niet in een str zijn)"
+    def get_next_str_from_str_sequence(self, string: str) -> str:
+        """Returns the next token that should come after completing the string (by the language model)
+        TODO -V Betere comment """
         ...
 
-
-    def _datapoint_to_meta_feature_in(self, dp: DataPoint) -> Tensor:
-        # TODO split met meta in en meta uit (in heeft time talked, out niet)
-        """Returns a tensor that contains all features but the previous tokens.
-        This includes the time talked, and who the current talker is"""
-        return self._person_to_tensor(dp.current_talker) + self._time_talked_tensor(dp.time_talked)
-    
-    def _time_talked_tensor(self, time_talked) -> Tensor:
-        return torch.tensor([time_talked])
-        
-    def _person_to_tensor(self, person: Person) -> Tensor:
-        talker_int = ... # TODO swarchen
-        nb_people = ... # TODO swarchen
-        
-        one_hot = F.one_hot(torch.tensor([talker_int]), num_classes=nb_people).squeeze(0)
+    def get_n_next_strs_from_str_sequence(self, string: str, n: int) -> str:
         ...

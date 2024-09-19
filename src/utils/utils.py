@@ -1,7 +1,9 @@
 from torch import Tensor
 import torch
 
-from machine_learning.MLFeatures import OneHotTensor, ProbabilityTensor, TokenProbabilityTensor
+from datatypes.tensors.pure_tensors import ProbabilityTensor
+from datatypes.tensors.pure_tensors import OneHotTensor
+from datatypes.tensors.use_case_tensors import TokenProbabilityTensor
 
 
 class Utils:

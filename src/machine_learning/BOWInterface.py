@@ -1,6 +1,8 @@
 from datatypes.Person import Person, PersonManager
 from datatypes.datapoint import DataPoint
-from machine_learning.MLFeatures import BOWInputTensor, BOWOutputTensor, OneHotTensor, TalkerTensor, TokenCountTensor
+from datatypes.tensors.pure_tensors import OneHotTensor
+from datatypes.tensors.use_case_tensors import TalkerTensor, TokenCountTensor
+from datatypes.tensors.ml_tensors import BOWInputTensor, BOWOutputTensor
 from machine_learning.MLInterface import MLInterface
 
 
@@ -20,9 +22,9 @@ class BOWInterface(MLInterface):
         
         return BOWInputTensor(token_counts, talker_tensor)
         
-    
     def get_new_input(self, previous_input: BOWInputTensor, previous_output: BOWOutputTensor, temperature: float) -> BOWInputTensor:
-        """Converts the previous output into a new input        """
+        """Converts the previous output into a new input
+        TODO betere naam"""
         new_token_idx = Utils.sample_logit(previous_output.token_prob, temperature)
         new_tokens_tensor = previous_input.token_counts.add_one(new_token_idx)
 
