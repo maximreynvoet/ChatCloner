@@ -22,11 +22,11 @@ class BOWInterface(MLInterface):
         
         return BOWInputTensor(token_counts, talker_tensor)
         
-    def get_new_input(self, previous_input: BOWInputTensor, previous_output: BOWOutputTensor, temperature: float) -> BOWInputTensor:
+    def get_next_input(self, previous_input: BOWInputTensor, previous_output: BOWOutputTensor, temperature: float) -> BOWInputTensor:
         """Converts the previous output into a new input
         TODO betere naam"""
         new_token_idx = Utils.sample_logit(previous_output.token_prob, temperature)
-        new_tokens_tensor = previous_input.token_counts.add_one(new_token_idx)
+        new_tokens_tensor = previous_input.token_counts.add_one(new_token_idx).as_subclass(TokenCountTensor)
 
         new_talker = Utils.sample_logit(previous_output.talker_prob, temperature)
         new_talker_tensor = TalkerTensor.from_idx(new_talker, PersonManager.get_nb_persons()).as_subclass(TalkerTensor)
