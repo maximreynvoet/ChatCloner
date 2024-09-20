@@ -7,7 +7,8 @@ from datatypes.Token import Token
 
 @dataclass
 class DataPoint:
-    prev_tokens: List[Token]
+    prev_tokens: List[Token] 
+    "TODO more explanation if first elem of this list is the oldest or newest token ?"
     current_token: Token
     current_talker: Person
     previous_talker: Person
@@ -15,5 +16,19 @@ class DataPoint:
 
     def is_new_person_talking(self) -> bool:
         return self.time_talked == 0  # TODO klopt dit? Hoe wordt dit gemodelleerd? Maak test
+    
+    def minus_oldest(self) -> 'DataPoint':
+        """Returns a copy of this datapoint, where the oldest token is deleted
+        Useful for data augmentation
+        """
+        tokens = self.prev_tokens[1:] # TODO depends on what prev_tokens mean (when is first?)
+        time_talked = self.time_talked
+        if time_talked > len(tokens): time_talked = len(tokens)
+        return DataPoint(tokens, self.current_token, self.current_talker, self.previous_talker, time_talked)
 
+    def get_all_split(self) -> List["DataPoint"]:
+        "Returns all the datapoints you can get out of this one by data augmentation (removing all previous tokens)"
+        if len(self.prev_tokens) == 1: return [self]
+        else: return [self] + self.minus_oldest().get_all_split()
+        
 
