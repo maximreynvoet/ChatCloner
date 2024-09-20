@@ -6,6 +6,7 @@ HET IS ENKEL ALS JE HIER PLEZIER AAN BELEEFT DAT JE VERDER MAG WERKEN
 -V 2024-09-09
 
 # TODOS
+- Een echte tokenizer die beter doet dan per letter plz
 - BOW Trainen
   - time_talked invoegen in BOWModel
     - Ben het vergeten hihihi -V 2024-09-20

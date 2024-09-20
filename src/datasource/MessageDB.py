@@ -38,5 +38,8 @@ class MessageDB:
         "Generates all the text from all messages (useful for making tokenizer)"
         return "\n".join([m.content for m in self._messages])
     
+    def get_all_ascii_text(self) -> str:
+        return "\n".join([m.content.encode('ascii', 'ignore').decode('ascii') for m in self._messages])
+    
     def get_all_talkers(self, platform : Platform) -> Set[Optional[Person]]:
         return set([Person.string_to_person(m.talker, platform) for m in self._messages])
