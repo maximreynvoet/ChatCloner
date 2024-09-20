@@ -26,9 +26,11 @@ class DataPoint:
         if time_talked > len(tokens): time_talked = len(tokens)
         return DataPoint(tokens, self.current_token, self.current_talker, self.previous_talker, time_talked)
 
-    def get_all_split(self) -> List["DataPoint"]:
-        "Returns all the datapoints you can get out of this one by data augmentation (removing all previous tokens)"
-        if len(self.prev_tokens) == 1: return [self]
+    def get_all_split(self, min_tokens=1) -> List["DataPoint"]:
+        """Returns all the datapoints you can get out of this one by data augmentation (removing all previous tokens)
+        TODO denken om dit te gebruiken
+        """
+        if len(self.prev_tokens) < min_tokens : return [self]
         else: return [self] + self.minus_oldest().get_all_split()
         
 

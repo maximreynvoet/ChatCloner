@@ -20,19 +20,7 @@ class ConversationParser:
 
         args:
             N: the length of the sliding window (hoeveel tokens er in een datapoint mogen)
-        
-        TODO afhankelijk van hoeveel datapunten er zijn => denken aan een iterator-based aanpak
-
-        Sommige NN-aanpakken kunnen meer / beter leren als de voorbeelden at random gegeven worden
-
-        Bedenk de tradeoff tss memory, learning, etc
-
         ---
-
-        TODO Ook kan er van een datapunt met $n$ tokens $n$ trainings-voorbeelden gegenereerd worden.
-        Denken waar deze eigenschap gebruikt zou worden (hier zelf genereren ? In ML? In database? In de API die get_datapoint_example() genereert ?)
-
-        TODO Een endpoint / provider classe die get_datapoint() kan aanbieden. Deze kan op zijn beurt kiezen voor sequentieel te genereren of alles op te slaan en at random te providen
 
         TODO (indien reworking nodig): vervangen door functional approach (zie onderstaand messenger bericht):
         Niet ik die in mijn slaap een puur functional approach van map reduce heb gevonden 😅
@@ -57,14 +45,12 @@ class ConversationParser:
             else:
                 time_talked += 1
 
-            curr_tokens: List[Token] = tokenizer.sentence_to_tokens(
-                message.content)
+            curr_tokens: List[Token] = tokenizer.sentence_to_tokens(message.content)
 
             for curr_token in curr_tokens:
 
                 # create datapoint
-                dp: DataPoint = DataPoint(
-                    context_window, curr_token, curr_talker, prev_talker, time_talked)
+                dp = DataPoint(context_window, curr_token, curr_talker, prev_talker, time_talked)
                 conversation_tokens.append(dp)
 
                 # sorted first to last
