@@ -1,16 +1,7 @@
 
-from torch import Tensor
-import torch
-import torch.nn.functional as F
 
 
-from datatypes.Person import Person
-from datatypes.Token import Token
-from datatypes.datapoint import DataPoint
-from datatypes.tensors.use_case_tensors import TokenProbabilityTensor
-from other.TokenizerDB import TokenizerDB
 from other.tokenizer import Tokenizer
-from utils.utils import Utils
 
 
 class MLInterface:
