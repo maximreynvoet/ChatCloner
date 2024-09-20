@@ -31,3 +31,9 @@ this will give a progress bar for parsing messages.
 ## Help
 In vscode kan je rechts onder (bij python) auto import en type checking activeren
 Ook kan je gemakkelijk user snippets genereren
+
+## Folders
+- data: jouw data van de chats. Steek daar een Messenger folder en een Discord folder met de data van overeenkomstige platformen
+  - ***BELANGRIJK: DEEL DIE ZEKER NIET MET DERDEN !!!***
+  - \- V 2024-09-20 19:50
+- models: hier slaan we de modellen op
