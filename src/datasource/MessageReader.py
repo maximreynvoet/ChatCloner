@@ -1,7 +1,7 @@
 from datatypes.Message import Message
 
 import json
-from typing import List, Union
+from typing import List, Optional, Union
 
 class MessageReader:
     @staticmethod
@@ -11,7 +11,7 @@ class MessageReader:
 
 class MessengerMessageReader(MessageReader):
     @staticmethod
-    def _json_element_to_msg(json_msg: dict) -> Union[Message, None]: #TODO: use optional, union with None is not recommended (https://peps.python.org/pep-0484/#union-types)
+    def _json_element_to_msg(json_msg: dict) -> Optional[Message]: 
         "Returns a message object based on the json element, if valid (is only text), otherwise None"
         return Message(json_msg["text"], json_msg["senderName"]) if json_msg["type"] == "text" else None
     

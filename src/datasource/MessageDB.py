@@ -21,14 +21,16 @@ class MessageDB:
 
     @staticmethod
     def get_instance() -> "MessageDB":
-        if MessageDB._INSTANCE is None: MessageDB._INSTANCE = MessageDB._generate_instance(Platform(1)) # Uses messenger by default
+        # TODO als nood aan aparte db per platform: generate dat
+        if MessageDB._INSTANCE is None: MessageDB._INSTANCE = MessageDB._generate_instance()
         return MessageDB._INSTANCE
 
     @staticmethod
-    def _generate_instance(platform : Platform) -> "MessageDB":
-        messages = [MessengerMessageReader.read_messages_from_json(f) for f in JsonRepo.get_all_messenger_jsons_files()] if platform is Platform.MESSENGER \
-            else [DiscordMessageReader.read_messages_from_json(f) for f in JsonRepo.get_all_messenger_jsons_files()] 
-        flattened = [m for sublist in messages for m in sublist]
+    def _generate_instance() -> "MessageDB":
+        messenger_messages = [MessengerMessageReader.read_messages_from_json(f) for f in JsonRepo.get_all_messenger_jsons_files()]
+        discord_messages = [DiscordMessageReader.read_messages_from_json(f) for f in JsonRepo.get_all_messenger_jsons_files()] 
+        all_msgs = messenger_messages + discord_messages
+        flattened = [m for sublist in all_msgs for m in sublist]
         return MessageDB(flattened)
     
     def get_all_text(self) -> str:
