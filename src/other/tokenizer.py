@@ -19,7 +19,7 @@ class Tokenizer:
         ...
 
     @staticmethod
-    def generate_tokenizer(max_tokens: int) -> tkTokenizer:
+    def generate_tokenizer(max_tokens: int) -> 'Tokenizer':
         tokenizer = tkTokenizer(models.BPE())
         trainer = trainers.BpeTrainer(vocab_size=max_tokens)
         texts = MessageDB.get_instance().get_all_text()

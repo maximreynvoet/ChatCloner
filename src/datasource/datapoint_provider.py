@@ -2,7 +2,6 @@ from typing import Collection, Iterator
 
 from attr import dataclass
 
-from datasource.conversation_parser import ConversationParser
 from datatypes.datapoint import DataPoint
 from utils.MixedIterator import MixedIterator
 

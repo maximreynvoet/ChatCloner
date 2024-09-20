@@ -39,6 +39,7 @@ class BOWOutputTensor(MLOutputTensor):
     ...
 @dataclass
 class BOWInputTensor(MLInputTensor):
+    "TODO oei, neen niet goed, geen time_talked gebruikt!"
     token_counts: TokenCountTensor
     talker_tensor: TalkerTensor
 

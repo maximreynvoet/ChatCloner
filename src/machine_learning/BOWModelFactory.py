@@ -17,18 +17,6 @@ class BOWModelFactory:
         nb_people: 4-8
         """
         params = BoWModelInitParam.get_default_param(nb_people=nb_people, nb_tokens= nb_tokens)
-        return BOWModelFactory.get_BOWModel_from_params(params)
+        return BoWModel(params)
     
-    @staticmethod
-    def get_BOWModel_from_params(params: BoWModelInitParam) -> BoWModel:
-        return BoWModel(
-            nb_tokens= params.nb_tokens,
-            nb_people= params.nb_people,
-            
-            token_hidden=   FullyConnectedModule(params.token_hidden_seq, params.leaky_relu_slope),
-            people_hidden=  FullyConnectedModule(params.people_hidden_seq, params.leaky_relu_slope),
-            siamese_hidden= FullyConnectedModule(params.siamese_hidden_seq, params.leaky_relu_slope),
-            people_out=     FullyConnectedModule(params.people_out_seq, params.leaky_relu_slope),
-            token_out=      FullyConnectedModule(params.token_out_seq, params.leaky_relu_slope),
-        )
     

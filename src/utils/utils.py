@@ -1,4 +1,4 @@
-from typing import List
+from typing import Callable, Collection, List, TypeVar
 from torch import Tensor
 import torch
 
@@ -8,7 +8,6 @@ from datatypes.tensors.use_case_tensors import TokenProbabilityTensor
 
 
 class Utils:
-    ...
 
     @staticmethod
     def get_one_hot_tensor(tensor_len: int, idx: int) -> OneHotTensor:
@@ -56,3 +55,7 @@ class Utils:
         idx = torch.multinomial(scaled, 1)
         return int(idx.item())
     
+    T = TypeVar("T")
+    @staticmethod
+    def flatmap(collection: List[T], function: Callable[[T], List[T]]) -> List[T]:
+        return [x for item in collection for x in function(item)]

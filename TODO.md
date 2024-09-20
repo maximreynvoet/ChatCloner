@@ -7,6 +7,8 @@ HET IS ENKEL ALS JE HIER PLEZIER AAN BELEEFT DAT JE VERDER MAG WERKEN
 
 # TODOS
 - BOW Trainen
+  - time_talked invoegen in BOWModel
+    - Ben het vergeten hihihi -V 2024-09-20
 - Andere ML modellen (transformer based, LSTM, whatever floats your boat / je meer ervaring wilt hebben)
 - Tests maken
 
