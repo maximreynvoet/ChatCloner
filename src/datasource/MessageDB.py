@@ -27,8 +27,9 @@ class MessageDB:
 
     @staticmethod
     def _generate_instance() -> "MessageDB":
+        
         messenger_messages = [MessengerMessageReader.read_messages_from_json(f) for f in JsonRepo.get_all_messenger_json_chat_paths()]
-        discord_messages = [DiscordMessageReader.read_messages_from_json(f) for f in JsonRepo.get_all_messenger_json_chat_paths()] # TODO Aie bruh nee dat zijn messenger files lol
+        discord_messages = [DiscordMessageReader.read_messages_from_json(f) for f in JsonRepo.get_all_discord_json_chats_paths()]
         all_msgs = messenger_messages + discord_messages
         flattened = [m for sublist in all_msgs for m in sublist]
         return MessageDB(flattened)
