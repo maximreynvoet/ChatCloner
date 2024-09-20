@@ -1,2 +1,5 @@
 settings.json
 *.pyc
+data
+models
+.vscode
