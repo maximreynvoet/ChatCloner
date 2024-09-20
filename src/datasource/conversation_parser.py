@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from datatypes.Message import Message
-from datatypes.Person import Person
+from datatypes.Person import Person, PersonManager
 from datatypes.Token import Token
 from datatypes.datapoint import DataPoint
 from other.tokenizer import Tokenizer
@@ -40,7 +40,7 @@ class ConversationParser:
             # set the previous talker
             if message.talker != curr_talker:
                 prev_talker = curr_talker
-                curr_talker = Person(message.talker)
+                curr_talker = PersonManager.string_to_person(message.talker)
                 time_talked = 0
             else:
                 time_talked += 1

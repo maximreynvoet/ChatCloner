@@ -22,6 +22,10 @@ class Person(Enum):
     @staticmethod
     def from_int(i: int) -> 'Person':
         return PersonManager.int_to_person(i)
+    
+    @staticmethod
+    def from_string(sender: str) -> "Person":
+        return PersonManager.string_to_person(sender)
 
 class PersonManager:
     _int_mapping = {
@@ -39,23 +43,16 @@ class PersonManager:
     def _get_intvalue_for_unknown() -> int:
         return PersonManager.get_nb_persons()
 
-    @classmethod
-    def string_to_person(cls, sender : str, platform : Platform) -> Person:
-        if platform is Platform.DISCORD: # discord
-            
-            # using nickname
-            if sender == "Vico":
-                return Person.VICTOR
-            elif sender == "CrusaderMage":
-                return Person.MAXIM
-            else:
-                return Person.UNKNOWN
-        
-        else: # messenger
+    _alias_map = {
+        "Vico": Person.VICTOR,
+        "CrusaderMage": Person.MAXIM,
+    }
 
-            # Facebook Messenger uses full names
-            firstname = sender.split(" ")[0]
-            return (Person(firstname) if firstname in ["Maxim","Victor", "Nick"] else Person.UNKNOWN)
+    @classmethod
+    def string_to_person(cls, sender: str) -> Person:
+        first_name = sender.split(" ")[0]
+        return PersonManager._alias_map.get(first_name) or Person(first_name) or Person.UNKNOWN
+        
 
     @staticmethod
     def person_to_int(person: "Person") -> int:

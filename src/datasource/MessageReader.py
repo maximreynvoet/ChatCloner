@@ -13,7 +13,11 @@ class MessengerMessageReader(MessageReader):
     @staticmethod
     def _json_element_to_msg(json_msg: dict) -> Optional[Message]: 
         "Returns a message object based on the json element, if valid (is only text), otherwise None"
-        return Message(json_msg["text"], json_msg["senderName"]) if json_msg["type"] == "text" else None
+        try:
+            return Message(json_msg["content"], json_msg["sender_name"])
+        except KeyError:
+            return None
+            
     
     @staticmethod
     def _read_messages_from_json_ftl(json_file: str) -> List[Message]:
