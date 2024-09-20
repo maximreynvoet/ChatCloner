@@ -18,6 +18,9 @@ class Tokenizer:
     def get_instance() -> "Tokenizer":
         ...
 
+    "TODO dit w beetje overal accessed, niet goed, maar beste manier tot nu toe om niet overal de tokenizer te moeten laten passeren"
+    NUMBER_TOKENS = 256
+
 if __name__ == "__main__":
     t = TokenizerDB.generate_tokenizer(1024)
     while 1:
