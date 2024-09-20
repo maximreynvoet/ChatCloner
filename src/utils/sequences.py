@@ -18,7 +18,7 @@ class Sequences:
         
         res = [start]
         if start > end: # Decreasing sequence
-            power = 1/power if power > 1 else power
+            power = 1 / power if power > 1 else power
             next_val = res[-1] ** power
             while next_val > end:
                 res.append(int(next_val))

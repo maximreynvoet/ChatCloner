@@ -27,8 +27,11 @@ class BoWModelInitParam:
         siamese_repeat = 4
         siamese_in = token_siamese_in + people_siamese_in
         siamese_out = siamese_in
-        token_in_power = 0.9
-        siam_out_power = 0.8
+        token_in_power = 0.5
+        siam_out_power = 0.5
+
+        # token_in_power = 0.9
+        # siam_out_power = 0.8
 
         return BoWModelInitParam(
                         nb_tokens=nb_tokens,

@@ -28,9 +28,9 @@ def generate_model():
     
     model = BOWModelFactory.get_default_epmty_instance(nb_tokens, nb_people)
 
-    model.train_model(provider, 5)
+    model.train_model(provider, 1)
 
-    Saving.save_bow_model(model, "models/bowwow.pth") # With love that is my hero bowwow
+    Saving.save_bow_model(model, "../models/bowwow.pth") # With love that is my hero bowwow
 
 if __name__ == "__main__":
     generate_model()

@@ -16,6 +16,7 @@ class FullyConnectedModule(nn.Module):
         self._out_layer = nn.Linear(layer_sizes[-2], layer_sizes[-1])
 
     def forward(self, x):
+        x = x.float()
         # Forward through the hidden layers with activation
         for layer in self._hidden_fc_layers:
             x = nn.functional.leaky_relu(layer(x), self._slope)

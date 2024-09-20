@@ -35,9 +35,9 @@ class BoWModel(PytorchTextPredictor):
         return self._shape_params
         
     def forward(self, x: BOWInputTensor) -> BOWOutputTensor:
-        siamese_tokens = self._token_hidden(x.token_counts)
-        siamese_people = self._people_hidden(x.talker_tensor)
-        siamese_in = torch.cat(siamese_tokens, siamese_people)
+        siamese_tokens = self._token_hidden(x.token_counts).as_subclass(torch.Tensor)
+        siamese_people = self._people_hidden(x.talker_tensor).as_subclass(torch.Tensor)
+        siamese_in = torch.cat((siamese_tokens, siamese_people), dim=0)
         siamese_out = self._siamese_hidden(siamese_in)
         token_out = self._token_out(siamese_out)
         people_out = self._people_out(siamese_out)
@@ -78,3 +78,4 @@ class BoWModel(PytorchTextPredictor):
                 
                 # Accumulate the loss for reporting
                 total_loss += loss.item()
+
