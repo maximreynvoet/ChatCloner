@@ -1,10 +1,9 @@
-from typing import Callable, Collection, List, TypeVar
-from torch import Tensor
+from typing import Callable, List, TypeVar
 import torch
+from tqdm import tqdm
 
 from datatypes.tensors.pure_tensors import ProbabilityTensor
 from datatypes.tensors.pure_tensors import OneHotTensor
-from datatypes.tensors.use_case_tensors import TokenProbabilityTensor
 
 
 class Utils:
@@ -57,5 +56,5 @@ class Utils:
     
     T = TypeVar("T")
     @staticmethod
-    def flatmap(collection: List[T], function: Callable[[T], List[T]]) -> List[T]:
-        return [x for item in collection for x in function(item)]
+    def flatmap(collection: List[T], function: Callable[[T], List[T]], show_progress: bool= False) -> List[T]:
+        return [x for item in tqdm(collection, "Applying flatmap", disable= not show_progress) for x in function(item)]

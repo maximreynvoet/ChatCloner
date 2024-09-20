@@ -28,7 +28,7 @@ class DataPoint:
 
     def get_all_split(self, min_tokens=1) -> List["DataPoint"]:
         """Returns all the datapoints you can get out of this one by data augmentation (removing all previous tokens)
-        TODO denken om dit te gebruiken
+        TODO dit maar niet recursief want python kills speed met recursion
         """
         if len(self.prev_tokens) < min_tokens : return [self]
         else: return [self] + self.minus_oldest().get_all_split()

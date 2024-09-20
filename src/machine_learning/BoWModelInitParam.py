@@ -27,16 +27,18 @@ class BoWModelInitParam:
         siamese_repeat = 4
         siamese_in = token_siamese_in + people_siamese_in
         siamese_out = siamese_in
+        token_in_power = 0.9
+        siam_out_power = 0.8
 
         return BoWModelInitParam(
                         nb_tokens=nb_tokens,
                         nb_people=nb_people,
 
-                        token_hidden_seq=   Sequences.power_sequence(nb_tokens, token_siamese_in, 0.75),
+                        token_hidden_seq=   Sequences.power_sequence(nb_tokens, token_siamese_in, token_in_power),
                         people_hidden_seq=  Sequences.repeat_sequence(nb_people, people_repeat),
                         siamese_hidden_seq= Sequences.repeat_sequence(siamese_in, siamese_repeat),
-                        people_out_seq=     Sequences.power_sequence(siamese_out, nb_people, 0.5),
-                        token_out_seq=      Sequences.power_sequence(siamese_out, nb_tokens, 0.5),
+                        people_out_seq=     Sequences.power_sequence(siamese_out, nb_people, siam_out_power),
+                        token_out_seq=      Sequences.power_sequence(siamese_out, nb_tokens, siam_out_power),
                         
                         leaky_relu_slope= 0.01
                         )

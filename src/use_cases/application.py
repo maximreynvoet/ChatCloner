@@ -21,7 +21,8 @@ def generate_model():
     messages = MessageDB.get_instance().get_messages()
     
     datapoints = ConversationParser().parse(messages, window_size, tokenizer)
-    augmented_datapoints = Utils.flatmap(datapoints, lambda x: x.get_all_split(1))
+    # augmented_datapoints = Utils.flatmap(datapoints, lambda x: x.get_all_split(1), True)
+    augmented_datapoints = datapoints
     random.shuffle(augmented_datapoints)
     provider = FixedDatapointProvider(augmented_datapoints)
     
@@ -31,3 +32,5 @@ def generate_model():
 
     Saving.save_bow_model(model, "models/bowwow.pth") # With love that is my hero bowwow
 
+if __name__ == "__main__":
+    generate_model()

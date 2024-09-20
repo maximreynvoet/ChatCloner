@@ -16,15 +16,16 @@ TODO ook de len function implementeren
 """
 
 
-class DatapointProvider(Iterator[DataPoint]):
+class DatapointProvider():
     ...
 
 
-@dataclass
 class FixedDatapointProvider(DatapointProvider):
     """A datapoint provider that works by first generating all datapoints, and then building an iterator on top of it
     This can be stringent on the memory for bigger datasets"""
-    datapoints: Collection[DataPoint]
+    def __init__(self, datapoints: Collection[DataPoint]) -> None:
+        super().__init__()
+        self.datapoints = datapoints
 
     def __iter__(self) -> Iterator[DataPoint]:
         return iter(self.datapoints)

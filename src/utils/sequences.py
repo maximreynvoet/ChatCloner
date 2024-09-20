@@ -13,11 +13,27 @@ class Sequences:
         """Returns the sequence that starts at "start" and ends at "end", where every value decreases via the harmonic sequence of power "power"
         """
         "TODO ook een max_length van de sequence als argument (zo verbied je te lang en de NN teveel params)"
-        assert 0 < power < 1, f"The power for decreasing the sequence via a power must be between 0,1; not {power}"
-        assert start > end > 0
+        assert start > 0 and end > 0
+        assert power != 0
+        
         res = [start]
-        while res[-1] > end:
-            res.append(int(res[-1] ** power))
+        if start > end: # Decreasing sequence
+            power = 1/power if power > 1 else power
+            next_val = res[-1] ** power
+            while next_val > end:
+                res.append(int(next_val))
+                next_val = res[-1] ** power
+                
+
+        if start < end: # Increasing sequence
+            power = 1/power if power < 1 else power
+            next_val = res[-1] ** power
+            while next_val < end:
+                res.append(int(next_val))
+                next_val = res[-1] ** power
+
+        
+        if res[-1] != end: res.append(end)
         return res
     
     @staticmethod

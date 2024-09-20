@@ -3,9 +3,6 @@
 
 from torch import Tensor
 
-from utils.utils import Utils
-
-
 class ProbabilityTensor(Tensor):
     "Tensor that represents a probability distribution"
 
@@ -25,5 +22,6 @@ class OneHotTensor(Tensor):
 
     @staticmethod
     def from_idx(idx: int, size: int) -> "OneHotTensor":
+        from utils.utils import Utils
         t = Utils.get_one_hot_tensor(size, idx)
         return t.as_subclass(OneHotTensor)
