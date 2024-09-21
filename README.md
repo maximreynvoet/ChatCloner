@@ -1,5 +1,13 @@
 # ChatCloner
 
+## In het kort
+1. Basically: steek de json van de chats die je wilt mimicken in de `data/Chats/Messenger` of `data/Chats/Discord` folder
+2. Run de `src/use_cases/application.py` (mss moet je wel iets veranderen, idk)
+3. ???
+4. Enjoy!
+
+Noot: ML is nog zeker niet ok nu. Het urgentste is om nu een echte tokenizer te hebben, en alle todos oplossen, alsook proberen te fixen waarom model niet zo goeie predictions doet
+
 ## Coding Guidelines
 Probeer type hints en een type checker te gebruiken indien je kan.
 
