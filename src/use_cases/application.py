@@ -19,7 +19,7 @@ def generate_model():
     # TODO ja ik weet geen test / split, maar dat is hier voor de lol
     nb_tokens = Tokenizer.NUMBER_TOKENS
     nb_people = PersonManager.get_nb_persons()
-    tokenizer = Tokenizer.generate_tokenizer(nb_tokens)
+    tokenizer = Tokenizer._generate_tokenizer(nb_tokens)
     window_size = 128 # BOW model -> we are able to have a large window
     
     messages = MessageDB.get_instance().get_messages()
@@ -43,7 +43,7 @@ def test_model():
     
 
     for temperature in [0.01, 0.1, 0.3, 0.5, 0.8, 1, 1.2, 1.5, 1.8, 2, 3]:
-        predicted = interface.continue_convo(Conversation(conversation.copy()), 128, temperature, 128)
+        predicted = interface.predict_convo_continuation(Conversation(conversation.copy()), 128, temperature, 128)
         print(f"Predicting continuation at temperature {temperature}")
         print(predicted)
 

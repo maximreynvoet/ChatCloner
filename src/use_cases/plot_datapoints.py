@@ -11,7 +11,7 @@ from other.tokenizer import Tokenizer
 
 def get_data() -> List[Tuple[int, int]]:
     nb_tokens = Tokenizer.NUMBER_TOKENS
-    tokenizer = Tokenizer.generate_tokenizer(nb_tokens)
+    tokenizer = Tokenizer._generate_tokenizer(nb_tokens)
     messages = MessageDB.get_instance().get_messages()
 
     res = []

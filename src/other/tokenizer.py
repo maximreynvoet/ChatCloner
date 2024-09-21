@@ -1,4 +1,5 @@
-from typing import List
+from itertools import count
+from typing import List, Tuple
 
 from attr import dataclass
 
@@ -16,7 +17,7 @@ class Tokenizer:
     NUMBER_TOKENS = 1024
 
     def sentence_to_tokens(self, sentence: str) -> List[Token]:
-        return self._model.encode(sentence)
+        return self._model.encode(sentence).ids
 
     def token_to_str(self, token: Token) -> str:
         return self._model.decode([token])
@@ -30,11 +31,19 @@ class Tokenizer:
 
     @staticmethod
     def get_instance() -> "Tokenizer":
-        if Tokenizer._INSTANCE is None: Tokenizer._INSTANCE = Tokenizer.generate_tokenizer(Tokenizer.NUMBER_TOKENS)
+        if Tokenizer._INSTANCE is None: Tokenizer._INSTANCE = Tokenizer._generate_tokenizer(Tokenizer.NUMBER_TOKENS)
         return Tokenizer._INSTANCE
+    
+    def get_token_str_mapping(self) -> List[Tuple[int, str]]:
+        res = []
+        for i in count():
+            t = self._model.id_to_token(i)
+            if t is None: break
+            else: res.append((i, t))
+        return res
 
     @staticmethod
-    def generate_tokenizer(max_tokens: int) -> 'Tokenizer':
+    def _generate_from(text: str, max_tokens: int) -> 'Tokenizer':
         # tokenizer = tkTokenizer(models.BPE())
         # trainer = trainers.BpeTrainer(vocab_size=max_tokens)
         # texts = MessageDB.get_instance().get_all_ascii_text()
@@ -62,16 +71,18 @@ class Tokenizer:
         )
         
         # Get the texts and train the tokenizer
-        texts = MessageDB.get_instance().get_all_ascii_text()
-        tokenizer.train_from_iterator(texts, trainer=trainer)
+        tokenizer.train_from_iterator([text], trainer=trainer)
         
         return Tokenizer(tokenizer)
-
-
+    
+    @staticmethod
+    def _generate_tokenizer(max_tokens: int) -> 'Tokenizer':
+        text = MessageDB.get_instance().get_all_ascii_text()
+        return Tokenizer._generate_from(text, max_tokens)
 
 
 if __name__ == "__main__":
-    t = Tokenizer.generate_tokenizer(1024)
+    t = Tokenizer._generate_tokenizer(1024)
     while 1:
         i = input("Test sentence:    ")
         tokens = t.sentence_to_tokens(i)

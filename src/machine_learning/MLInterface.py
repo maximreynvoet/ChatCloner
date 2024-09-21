@@ -28,7 +28,7 @@ class MLInterface:
 
     "TODO hoe modellen van X praat (kan niet in een str zijn)"
 
-    def continue_convo(self, conversation: Conversation, nb_fragments: int, temperature: float, window_size: int) -> 'Conversation':
+    def predict_convo_continuation(self, conversation: Conversation, nb_fragments: int, temperature: float, window_size: int) -> 'Conversation':
         "Continues the conversation by doing a number of iterations on the ml model"
         input_dp = self.convo_to_dp(conversation, window_size)
         fragments = self._predict_next_fragments(nb_fragments, input_dp, temperature)
