@@ -19,6 +19,9 @@ class Person(Enum):
     def to_int(self)-> int:
         return PersonManager.person_to_int(self)
     
+    def to_str(self) -> str:
+        return self.value
+    
     @staticmethod
     def from_int(i: int) -> 'Person':
         return PersonManager.int_to_person(i)
