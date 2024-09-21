@@ -1,7 +1,9 @@
+from cgi import print_arguments
 import random
 from datasource.MessageDB import MessageDB
 from datasource.conversation_parser import ConversationParser
 from datasource.datapoint_provider import DatapointProvider, FixedDatapointProvider
+from datatypes.Conversation import Conversation
 from datatypes.Person import PersonManager
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BOWModelFactory import BOWModelFactory
@@ -35,12 +37,16 @@ def generate_model():
     Saving.save_bow_model(model, "../models/bowwow.pth") # With love that is my hero bowwow
 
 def test_model():
-    model = Saving.load_bow_model("../models.bowwow.pth")
+    model = Saving.load_bow_model("../models/bowwow.pth")
     conversation = Examples.example_convo
     interface = BOWInterface(model)
-    predicted = interface.continue_convo(conversation, 128, 1, 128)
+    
 
-    print(predicted)
+    for temperature in [0.01, 0.1, 0.3, 0.5, 0.8, 1, 1.2, 1.5, 1.8, 2, 3]:
+        predicted = interface.continue_convo(Conversation(conversation.copy()), 128, temperature, 128)
+        print(f"Predicting continuation at temperature {temperature}")
+        print(predicted)
+
     print(5)
 
     

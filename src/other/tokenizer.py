@@ -10,6 +10,8 @@ from datasource.MessageDB import MessageDB
 class Tokenizer:
     _model: tkTokenizer
 
+    _INSTANCE = None
+
     "TODO dit w beetje overal accessed, niet goed, maar beste manier tot nu toe om niet overal de tokenizer te moeten laten passeren"
     NUMBER_TOKENS = 1024
 
@@ -17,7 +19,7 @@ class Tokenizer:
         return self._model.encode(sentence)
 
     def token_to_str(self, token: Token) -> str:
-        return self._model.decode(token)
+        return self._model.decode([token])
 
     def tokens_to_str(self, tokens: List[Token]) -> str:
         return self._model.decode(tokens)
@@ -28,7 +30,8 @@ class Tokenizer:
 
     @staticmethod
     def get_instance() -> "Tokenizer":
-        ...
+        if Tokenizer._INSTANCE is None: Tokenizer._INSTANCE = Tokenizer.generate_tokenizer(Tokenizer.NUMBER_TOKENS)
+        return Tokenizer._INSTANCE
 
     @staticmethod
     def generate_tokenizer(max_tokens: int) -> 'Tokenizer':
