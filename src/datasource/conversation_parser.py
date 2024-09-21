@@ -1,4 +1,5 @@
 from tqdm import tqdm
+from datatypes.Conversation import Conversation
 from datatypes.Message import Message
 from datatypes.Person import Person, PersonManager
 from datatypes.Token import Token
@@ -14,7 +15,7 @@ from typing import List, Optional
 class ConversationParser:
 
     @staticmethod
-    def parse(messages: List[Message], N: int, tokenizer: Tokenizer) -> List[DataPoint]:
+    def parse(conversation: Conversation, N: int, tokenizer: Tokenizer) -> List[DataPoint]:
         """
         Parses a list of messages to a collection of datapoints.
 
@@ -39,7 +40,7 @@ class ConversationParser:
         curr_talker = Person.UNKNOWN
         time_talked: int = 0
 
-        for message in tqdm(messages, "Parsing messages to datapoint"):
+        for message in tqdm(conversation, "Parsing messages to datapoint"):
 
             # set the previous talker
             if message.talker != curr_talker:

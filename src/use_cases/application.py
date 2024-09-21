@@ -32,5 +32,9 @@ def generate_model():
 
     Saving.save_bow_model(model, "../models/bowwow.pth") # With love that is my hero bowwow
 
+def test_model():
+    model = Saving.load_bow_model("../models.bowwow.pth")
+    
+
 if __name__ == "__main__":
     generate_model()
