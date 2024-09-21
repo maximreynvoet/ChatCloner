@@ -62,11 +62,10 @@ class BOWInputTensor(MLInputTensor):
         return BOWInputTensor(token_counts, talker_tensor)
     
     @staticmethod
-    def from_previous_output(previous_input: "BOWInputTensor", previous_output: BOWOutputTensor, temperature: float) -> "BOWInputTensor":
-        fragment = previous_output.as_message_fragment(temperature)
+    def from_previous_output(previous_input: "BOWInputTensor", output_fragment: MessageFragment) -> "BOWInputTensor":
 
-        new_tokens_tensor = previous_input.token_counts.add_one(fragment.token_id).as_subclass(TokenCountTensor)
-        new_talker_tensor = TalkerTensor.from_idx(fragment.talker_id, PersonManager.get_nb_persons()).as_subclass(TalkerTensor)
+        new_tokens_tensor = previous_input.token_counts.add_one(output_fragment.token_id).as_subclass(TokenCountTensor)
+        new_talker_tensor = TalkerTensor.from_idx(output_fragment.talker_id, PersonManager.get_nb_persons()).as_subclass(TalkerTensor)
 
         return BOWInputTensor(new_tokens_tensor, new_talker_tensor)
 

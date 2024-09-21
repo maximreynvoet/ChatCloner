@@ -1,5 +1,6 @@
 from tqdm import tqdm
 from datasource.datapoint_provider import DatapointProvider
+from datatypes.MessageFragment import MessageFragment
 from datatypes.Person import Person, PersonManager
 from datatypes.datapoint import DataPoint
 from datatypes.tensors.pure_tensors import OneHotTensor
@@ -18,5 +19,5 @@ class BOWInterface(MLInterface):
     """TODO Het is niet omdat nu alle methodes weg zijn dat deze classe voor niets dient. Gebruik het om UI te doen, prompt en van text in -> text uit
     """
 
-    def generate_next_input(self, prev_input: MLInputTensor, prev_output: MLOutputTensor, temperature: float) -> MLInputTensor:
-        return BOWInputTensor.from_previous_output(prev_input, prev_output, temperature)
+    def _generate_next_input(self, prev_input: MLInputTensor, out_fragment: MessageFragment) -> MLInputTensor:
+        return BOWInputTensor.from_previous_output(prev_input, out_fragment)
