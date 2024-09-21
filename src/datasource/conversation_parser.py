@@ -22,6 +22,10 @@ class ConversationParser:
             N: the length of the sliding window (hoeveel tokens er in een datapoint mogen)
         ---
 
+        TODO meer uitleg over wat de list is als output. Is het laatste element in de lijst de meest recente message?
+            Is input message van oud -> nieuw ?
+            Dit allemaal documenteren en kijken dat de callers het goed doen
+
         TODO (indien reworking nodig): vervangen door functional approach (zie onderstaand messenger bericht):
         Niet ik die in mijn slaap een puur functional approach van map reduce heb gevonden 😅
         Map messages naar tuple van <token, author>, neem sliding window van size n erop, en vanuit die sliding window kan je bepalen wie de auteur is

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
 import torch
+from datatypes.Message import Message
+from datatypes.MessageFragment import MessageFragment
 from datatypes.Person import PersonManager
 from datatypes.datapoint import DataPoint
 from datatypes.tensors.use_case_tensors import TalkerProbabilityTensor, TokenCountTensor, TokenProbabilityTensor
@@ -33,6 +35,12 @@ class MLOutputTensor:
         token_tensor = Utils.get_one_hot_tensor(Tokenizer.NUMBER_TOKENS, dp.current_token)
         talker_tensor= Utils.get_one_hot_tensor(PersonManager.get_nb_persons(), dp.current_talker.to_int())
         return MLOutputTensor(token_tensor, talker_tensor)
+    
+    def as_message_fragment(self, temperature: float) -> MessageFragment:
+        token_idx = Utils.sample_logit(self.token_prob, temperature)
+        talker_idx = Utils.sample_logit(self.talker_prob, temperature)
+
+        return MessageFragment(token_idx, talker_idx)
 
 @dataclass
 class BOWOutputTensor(MLOutputTensor):
@@ -55,11 +63,10 @@ class BOWInputTensor(MLInputTensor):
     
     @staticmethod
     def from_previous_output(previous_input: "BOWInputTensor", previous_output: BOWOutputTensor, temperature: float) -> "BOWInputTensor":
-        new_token_idx = Utils.sample_logit(previous_output.token_prob, temperature)
-        new_tokens_tensor = previous_input.token_counts.add_one(new_token_idx).as_subclass(TokenCountTensor)
+        fragment = previous_output.as_message_fragment(temperature)
 
-        new_talker = Utils.sample_logit(previous_output.talker_prob, temperature)
-        new_talker_tensor = TalkerTensor.from_idx(new_talker, PersonManager.get_nb_persons()).as_subclass(TalkerTensor)
+        new_tokens_tensor = previous_input.token_counts.add_one(fragment.token_id).as_subclass(TokenCountTensor)
+        new_talker_tensor = TalkerTensor.from_idx(fragment.talker_id, PersonManager.get_nb_persons()).as_subclass(TalkerTensor)
 
         return BOWInputTensor(new_tokens_tensor, new_talker_tensor)
 

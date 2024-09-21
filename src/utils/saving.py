@@ -15,7 +15,7 @@ class Saving:
             path)
 
     @staticmethod
-    def load_bow_model(path: str) -> nn.Module:
+    def load_bow_model(path: str) -> BoWModel:
         checkpoint = torch.load(path)
         loaded_model = BoWModel(checkpoint['shape_params'])
         loaded_model.load_state_dict(checkpoint['state'])
