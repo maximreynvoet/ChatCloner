@@ -6,7 +6,7 @@
 3. ???
 4. Enjoy!
 
-Noot: ML is nog zeker niet ok nu. Het urgentste is om nu een echte tokenizer te hebben, en alle todos oplossen, alsook proberen te fixen waarom model niet zo goeie predictions doet
+Noot: ML is nog zeker niet ok nu. Het urgentste is om nu een echte tokenizer te hebben, en alle todos oplossen, alsook proberen te fixen waarom model niet zo goeie predictions doet (mss normaal dat bag of words op letter niveau niet goed is, maar waarom zoveel repeat van zelfde token ? Wss foutje in de inference pipeline)
 
 ## Coding Guidelines
 Probeer type hints en een type checker te gebruiken indien je kan.
