@@ -49,7 +49,6 @@ class MLInterface:
         ...
 
     def predict_output(self, input: MLInputTensor) -> MLOutputTensor:
-        # TODO subclass implement me
         ...
     
     def _generate_next_input(self, prev_input: MLInputTensor, out_fragment: MessageFragment) -> MLInputTensor:

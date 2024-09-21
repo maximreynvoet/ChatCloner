@@ -19,5 +19,15 @@ class BOWInterface(MLInterface):
     """TODO Het is niet omdat nu alle methodes weg zijn dat deze classe voor niets dient. Gebruik het om UI te doen, prompt en van text in -> text uit
     """
 
+    def __init__(self, model: BoWModel) -> None:
+        super().__init__()
+        self._model = model
+
     def _generate_next_input(self, prev_input: MLInputTensor, out_fragment: MessageFragment) -> MLInputTensor:
         return BOWInputTensor.from_previous_output(prev_input, out_fragment)
+    
+    def _dp_to_model_in(self, dp: DataPoint) -> MLInputTensor:
+        return BOWInputTensor.from_datapoint(dp)
+
+    def predict_output(self, input: MLInputTensor) -> MLOutputTensor:
+        return self._model(input)

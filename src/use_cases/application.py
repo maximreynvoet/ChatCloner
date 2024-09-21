@@ -3,9 +3,11 @@ from datasource.MessageDB import MessageDB
 from datasource.conversation_parser import ConversationParser
 from datasource.datapoint_provider import DatapointProvider, FixedDatapointProvider
 from datatypes.Person import PersonManager
+from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BOWModelFactory import BOWModelFactory
 from machine_learning.BoWModel import BoWModel
 from other.tokenizer import Tokenizer
+from utils.examples import Examples
 from utils.saving import Saving
 from utils.utils import Utils
 
@@ -34,7 +36,15 @@ def generate_model():
 
 def test_model():
     model = Saving.load_bow_model("../models.bowwow.pth")
+    conversation = Examples.example_convo
+    interface = BOWInterface(model)
+    predicted = interface.continue_convo(conversation, 128, 1, 128)
+
+    print(predicted)
+    print(5)
+
     
 
 if __name__ == "__main__":
-    generate_model()
+    test_model()
+    # generate_model()
