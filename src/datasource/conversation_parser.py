@@ -52,7 +52,7 @@ class ConversationParser:
 
             curr_tokens: List[Token] = tokenizer.sentence_to_tokens(message.content)
 
-            for curr_token in curr_tokens.ids:
+            for curr_token in curr_tokens:
 
                 # create datapoint
                 dp = DataPoint(context_window, curr_token, curr_talker, prev_talker, time_talked)

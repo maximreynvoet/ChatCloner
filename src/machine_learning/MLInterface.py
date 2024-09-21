@@ -29,11 +29,13 @@ class MLInterface:
     "TODO hoe modellen van X praat (kan niet in een str zijn)"
 
     def predict_convo_continuation(self, conversation: Conversation, nb_fragments: int, temperature: float, window_size: int) -> 'Conversation':
-        "Continues the conversation by doing a number of iterations on the ml model"
+        """Continues the conversation by doing a number of iterations on the ml model
+        Returns a new (copy) of a new conversation"""
         input_dp = self.convo_to_dp(conversation, window_size)
         fragments = self._predict_next_fragments(nb_fragments, input_dp, temperature)
-        [conversation.add_message_fragment(f) for f in fragments]
-        return conversation
+        prediction = Conversation(conversation.copy())
+        [prediction.add_message_fragment(f) for f in fragments]
+        return prediction
 
     def _predict_next_fragments(self, nb_passes: int, input_dp: DataPoint, temperature: float) -> List[MessageFragment]:
         input = self._dp_to_model_in(input_dp)

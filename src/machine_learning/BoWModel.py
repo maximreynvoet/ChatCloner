@@ -1,3 +1,4 @@
+from typing import Callable
 from tqdm import tqdm
 from datasource.datapoint_provider import DatapointProvider
 from datatypes.tensors.ml_tensors import BOWInputTensor, BOWOutputTensor, MLOutputTensor
@@ -54,7 +55,7 @@ class BoWModel(PytorchTextPredictor):
         talker_loss= F.cross_entropy(pred_out.talker_prob, true_out.talker_prob)
         return token_loss + talker_loss
 
-    def train_model(self, data_provider: DatapointProvider, num_epochs: int) -> None:
+    def train_model(self, data_provider: DatapointProvider, num_epochs: int, interactive_eval_fn: Callable[[int], None]) -> None:
         
         optimizer = optim.Adam(self.parameters(), lr=0.001)
 
@@ -63,7 +64,8 @@ class BoWModel(PytorchTextPredictor):
         for epoch in tqdm(range(num_epochs), "Training epoch"):
             total_loss = 0.0
             
-            for dp in tqdm(data_provider, "Training on datapoint"):
+            for i, dp in tqdm(enumerate(data_provider), "Training on datapoint"):
+                interactive_eval_fn(i)
                 optimizer.zero_grad()  # Clear the gradients
                 
                 # Forward pass: compute predicted outputs by passing inputs to the model

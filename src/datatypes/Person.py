@@ -32,10 +32,10 @@ class Person(Enum):
 
 class PersonManager:
     _int_mapping = {
-        Person.MAXIM:   1,
-        Person.VICTOR:  2,
-        Person.NICK:    3,
-        Person.UNKNOWN: 4,
+        Person.MAXIM:   0,
+        Person.VICTOR:  1,
+        Person.NICK:    2,
+        Person.UNKNOWN: 3,
     }
 
     @staticmethod
