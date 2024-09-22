@@ -21,7 +21,7 @@ class BoWModelInitParam:
     leaky_relu_slope: float
 
     def describe(self) -> str:
-        return f"""
+        return f"""Estimated nb params: {self.approx_size()}
 tokens: {self.nb_tokens}
     encoding: {self.token_hidden_seq}
 people: {self.nb_people}

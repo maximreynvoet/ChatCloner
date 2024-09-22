@@ -2,12 +2,10 @@ import os
 
 from attr import dataclass
 from datatypes.Conversation import Conversation
-from datatypes.datapoint import DataPoint
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BoWModel import BoWModel
 from machine_learning.BoWModelInitParam import BoWModelInitParam
 from machine_learning.predict_convo_params import PredictConvoParams
-from machine_learning.training_observers.TestModelObserver import TestModelObserver
 from machine_learning.training_observers.TrainingObserverFactory import TrainingObserverFactory
 from utils.examples import Examples
 import random
@@ -16,7 +14,6 @@ from datasource.conversation_parser import ConversationParser
 from datasource.datapoint_provider import DatapointProvider, FixedDatapointProvider
 from datatypes.Person import PersonManager
 from machine_learning.BOWModelFactory import BOWModelFactory
-from machine_learning.training_observers.train_watcher import TrainingObserver
 from other.tokenizer import Tokenizer
 from utils.saving import Saving
 from utils.utils import Utils
@@ -70,7 +67,8 @@ class UseCases:
         
         losses = model.train_model(datapoint_provider, nb_epochs, observer)
         Saving.write_str_to_file("\n".join(map(str, losses)), os.path.join(save_dir, "Losses.txt"))
-        Saving.save_bow_model(model, os.path.join(save_dir, f"TrainedModel_{nb_epochs=}"))
+        Saving.save_bow_model(model, os.path.join(save_dir, f"TrainedModel_{nb_epochs=}.pth"))
+        Saving.write_str_to_file(model_params.describe(), os.path.join(save_dir, "ParamDescription.txt"))
 
         return model
 
