@@ -11,7 +11,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 from machine_learning.fully_connected import FullyConnectedModule
-from machine_learning.train_watcher import TrainingObserver
+from machine_learning.training_observers.train_watcher import TrainingObserver
 
 
 class BoWModel(PytorchTextPredictor):

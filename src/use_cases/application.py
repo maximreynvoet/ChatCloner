@@ -6,7 +6,7 @@ from datatypes.Person import PersonManager
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BOWModelFactory import BOWModelFactory
 from machine_learning.predict_convo_params import PredictConvoParams
-from machine_learning.train_watcher import TestModelObserver
+from machine_learning.training_observers.TestModelObserver import TestModelObserver
 from other.tokenizer import Tokenizer
 from use_cases.UseCases import UseCases
 from utils.examples import Examples

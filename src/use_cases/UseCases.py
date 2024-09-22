@@ -3,6 +3,7 @@ from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BoWModel import BoWModel
 from machine_learning.BoWModelInitParam import BoWModelInitParam
 from machine_learning.predict_convo_params import PredictConvoParams
+from machine_learning.training_observers.TestModelObserver import TestModelObserver
 from utils.examples import Examples
 import random
 from datasource.MessageDB import MessageDB
@@ -10,7 +11,7 @@ from datasource.conversation_parser import ConversationParser
 from datasource.datapoint_provider import FixedDatapointProvider
 from datatypes.Person import PersonManager
 from machine_learning.BOWModelFactory import BOWModelFactory
-from machine_learning.train_watcher import TestModelObserver, TrainingObserver
+from machine_learning.training_observers.train_watcher import TrainingObserver
 from other.tokenizer import Tokenizer
 from utils.saving import Saving
 
