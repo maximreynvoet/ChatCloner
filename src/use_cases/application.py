@@ -43,12 +43,15 @@ def generate_model():
 
 def train_model():
     params = BoWModelInitParam.get_default_param()
-    UseCases.interactive_train(params, "SimpleModel", 1)
+    UseCases.interactive_train(params, "SimpleModel", 10)
 
-def test_model():
-    model = Saving.load_bow_model("../model.bowwow.pth")
+def test_model(model_path: str):
+    model = Saving.load_bow_model(model_path)
     UseCases.test_model_at_temperatures(model)
 
 if __name__ == "__main__":
     # test_model()
-    generate_model()
+    # generate_model()
+    train_model()
+    # test_model("../output/SimpleModel/Model_iter_100000.pth")
+    # test_model("../output/SimpleModel/Model_iter_1000000.pth")

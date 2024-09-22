@@ -24,7 +24,7 @@ class Saving:
     
     @staticmethod
     def write_str_to_file(string: str, file: str) -> None:
-        with open(file, "w") as f:
+        with open(file, "a") as f:
             f.write(string)
 
     @staticmethod

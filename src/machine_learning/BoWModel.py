@@ -1,19 +1,16 @@
-from typing import Callable, Collection
 from tqdm import tqdm
 from datasource.datapoint_provider import DatapointProvider
-from datatypes.datapoint import DataPoint
 from datatypes.tensors.ml_tensors import BOWInputTensor, BOWOutputTensor, MLOutputTensor
 from machine_learning.BoWModelInitParam import BoWModelInitParam
 from machine_learning.TextPredictor import PytorchTextPredictor
 
 import torch
-import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
 from machine_learning.fully_connected import FullyConnectedModule
+    
 from machine_learning.training_observers.train_watcher import TrainingObserver
-
 
 class BoWModel(PytorchTextPredictor):
     """Simple bag of words model

@@ -4,6 +4,7 @@ from machine_learning.BoWModel import BoWModel
 from machine_learning.BoWModelInitParam import BoWModelInitParam
 from machine_learning.predict_convo_params import PredictConvoParams
 from machine_learning.training_observers.TestModelObserver import TestModelObserver
+from machine_learning.training_observers.TrainingObserverFactory import TrainingObserverFactory
 from utils.examples import Examples
 import random
 from datasource.MessageDB import MessageDB
@@ -53,7 +54,7 @@ class UseCases:
         print(f"Training model with {nb_params=}")
 
         interface = BOWInterface(model)
-        observer = TrainingObserver.get_default_train_observers(model_name, interface, 10_000)
+        observer = TrainingObserverFactory.get_default_train_observers(model_name, interface, 25_000)
         
         model.train_model(provider, nb_epochs, observer)
 

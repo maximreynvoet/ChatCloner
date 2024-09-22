@@ -1,13 +1,11 @@
 import os
 import random
 
-from matplotlib.pyplot import savefig
 from datasource.MessageDB import MessageDB
 from datasource.conversation_parser import ConversationParser
 from datasource.datapoint_provider import DatapointProvider, FixedDatapointProvider
 from datatypes.Conversation import Conversation
 from machine_learning.BOWInterface import BOWInterface
-from machine_learning.BoWModel import BoWModel
 from machine_learning.TextPredictor import PytorchTextPredictor
 from machine_learning.training_observers.train_watcher import TrainingObserver
 from utils.examples import Examples
@@ -27,7 +25,7 @@ class EvalLossObserver(TrainingObserver):
         self._counter += 1
         if self._counter % self._frequency == 0:
             loss = model.estimate_loss(self._test_set)
-            Saving.write_str_to_file(f"Loss at {self._counter}: {loss}", self._save_file)
+            Saving.write_str_to_file(f"Loss at {self._counter}: {loss}\n", self._save_file)
 
     @staticmethod
     def from_params(frequency: int, nb_messages: int, window_size: int, interface: BOWInterface, save_file: str) -> 'EvalLossObserver':

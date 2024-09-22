@@ -2,4 +2,5 @@ settings.json
 *.pyc
 data
 models
+output
 .vscode
