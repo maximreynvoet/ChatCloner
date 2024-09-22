@@ -1,8 +1,7 @@
 
-from dataclasses import dataclass
+from typing import Collection
 from datatypes.Conversation import Conversation
 from machine_learning.BOWInterface import BOWInterface
-from machine_learning.BoWModel import BoWModel
 from machine_learning.TextPredictor import PytorchTextPredictor
 from machine_learning.predict_convo_params import PredictConvoParams
 from utils.saving import Saving
@@ -11,17 +10,27 @@ from utils.saving import Saving
 """
 TODO ik ben niet zoooo blij dat het een pytorchTextPredictor zou moeten zijn als param
 TODO ook ene voor model te saven (checkpointen)
-TODO ook trainingsobserver combineren (zo kan je in een observer zowel eval als saven (op andere frequency dat is)) 
-    Of om ook inference te doen maar op / temperatuur
 """
 
 
 class TrainingObserver:
+    def combined_with(self, other: 'TrainingObserver') -> 'TrainingObserver':
+        # Return a new observer whose update function calls the first one and then the other one
+        return CombinedTrainingsObserver([self, other])
+
     def at_new_training_instance(self, model: PytorchTextPredictor) -> None:
         """Method that gets called when the model sees a new training instance.
         Subclasses could implement this to for example see what the model would predict on a test-example"""
         pass
 
+class CombinedTrainingsObserver(TrainingObserver):
+    
+    def __init__(self, observers: Collection[TrainingObserver]) -> None:
+        super().__init__()
+        self._observers = observers
+
+    def update(self, model) -> None:
+        [m.at_new_training_instance(model) for m in self._observers]
 
 class ContinueConvoObserver(TrainingObserver):
     "Class that continues a test conversation every n trainings examples"
