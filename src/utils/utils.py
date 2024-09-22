@@ -2,6 +2,7 @@ from typing import Callable, List, TypeVar
 import torch
 from tqdm import tqdm
 
+from datatypes.datapoint import DataPoint
 from datatypes.tensors.pure_tensors import ProbabilityTensor
 from datatypes.tensors.pure_tensors import OneHotTensor
 
@@ -58,3 +59,7 @@ class Utils:
     @staticmethod
     def flatmap(collection: List[T], function: Callable[[T], List[T]], show_progress: bool= False) -> List[T]:
         return [x for item in tqdm(collection, "Applying flatmap", disable= not show_progress) for x in function(item)]
+    
+    @staticmethod
+    def augment_datapoints(datapoints: List[DataPoint]) -> List[DataPoint]:
+        return Utils.flatmap(datapoints, lambda x: x.get_all_split(1), True)

@@ -1,3 +1,4 @@
+import os
 from datatypes.Conversation import Conversation
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BoWModel import BoWModel
@@ -15,6 +16,7 @@ from machine_learning.BOWModelFactory import BOWModelFactory
 from machine_learning.training_observers.train_watcher import TrainingObserver
 from other.tokenizer import Tokenizer
 from utils.saving import Saving
+from utils.utils import Utils
 
 
 class UseCases:
@@ -33,19 +35,18 @@ class UseCases:
         print(5)
 
     @staticmethod
-    def interactive_train(model_params: BoWModelInitParam, model_name: str, nb_epochs: int) -> BoWModel:
+    def interactive_train(model_params: BoWModelInitParam, save_dir: str, nb_epochs: int) -> BoWModel:
         "Use case that trains the model and performs intermediate saving and output showing"
         nb_tokens = Tokenizer.NUMBER_TOKENS
         nb_people = PersonManager.get_nb_persons()
         tokenizer = Tokenizer._generate_tokenizer(nb_tokens)
-        window_size = 128  # BOW model -> we are able to have a large window
+        window_size = 32  # BOW model -> we are able to have a large window
 
         messages = MessageDB.get_instance().get_messages()
         conversation = Conversation(messages)
 
         datapoints = ConversationParser().parse(conversation, window_size, tokenizer)
-        # augmented_datapoints = Utils.flatmap(datapoints, lambda x: x.get_all_split(1), True)
-        augmented_datapoints = datapoints
+        augmented_datapoints = Utils.augment_datapoints(datapoints)
         random.shuffle(augmented_datapoints)
         provider = FixedDatapointProvider(augmented_datapoints)
 
@@ -54,8 +55,9 @@ class UseCases:
         print(f"Training model with {nb_params=}")
 
         interface = BOWInterface(model)
-        observer = TrainingObserverFactory.get_default_train_observers(model_name, interface, 25_000)
+        observer = TrainingObserverFactory.get_default_train_observers(save_dir, interface, 25_000)
         
-        model.train_model(provider, nb_epochs, observer)
+        losses = model.train_model(provider, nb_epochs, observer)
+        Saving.write_str_to_file("\n".join(map(str, losses)), os.path.join(save_dir, "Losses.txt"))
 
         return model

@@ -1,3 +1,4 @@
+from typing import List
 from tqdm import tqdm
 from datasource.datapoint_provider import DatapointProvider
 from datatypes.tensors.ml_tensors import BOWInputTensor, BOWOutputTensor, MLOutputTensor
@@ -73,14 +74,13 @@ class BoWModel(PytorchTextPredictor):
         self.train(prev_state_training) # Reset state to what it was
         return loss
 
-    def train_model(self, data_provider: DatapointProvider, num_epochs: int, training_observer: TrainingObserver) -> None:
-        
+    def train_model(self, data_provider: DatapointProvider, num_epochs: int, training_observer: TrainingObserver) -> List[float]:
+        "Trains the model and reports the losses from all datapoints"
         optimizer = optim.Adam(self.parameters(), lr=0.001)
-
         self.train()  # Set the model to training mode
+        losses = []
 
         for epoch in tqdm(range(num_epochs), "Training epoch"):
-            total_loss = 0.0
             
             for dp in tqdm(data_provider, "Training on datapoint"):
                 training_observer.at_new_training_instance(self)
@@ -97,5 +97,5 @@ class BoWModel(PytorchTextPredictor):
                 optimizer.step()
                 
                 # Accumulate the loss for reporting
-                total_loss += loss.item()
-
+                losses.append(loss.item())
+        return losses

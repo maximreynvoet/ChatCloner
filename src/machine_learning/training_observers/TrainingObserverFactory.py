@@ -10,11 +10,10 @@ from machine_learning.training_observers.train_watcher import CombinedTrainingsO
 
 class TrainingObserverFactory:
     @staticmethod
-    def get_default_train_observers(model_name: str, interface: BOWInterface, frequency: int) -> TrainingObserver:
-        save_dir = f"../output/{model_name}"
+    def get_default_train_observers(save_dir: str, interface: BOWInterface, frequency: int) -> TrainingObserver:
         test_path = os.path.join(save_dir, "inferences.txt")
         return CombinedTrainingsObserver([
             TestModelObserver.get_default_instance(test_path, interface, frequency),
             SaveModelObserver.get_default_instance(save_dir, frequency),
-            EvalLossObserver.get_default_instance(save_dir, interface, frequency)
+            # EvalLossObserver.get_default_instance(save_dir, interface, frequency)
         ])

@@ -31,7 +31,7 @@ class BoWInitParamFactory:
         return BoWModelInitParam(nb_tokens, nb_people, token_in_seq, people_in_seq, siamese_seq, people_out_seq, token_out_seq, 0.01)
     
     @staticmethod
-    def get_examples(nb_tokens: int, nb_people: int) -> List[BoWModelInitParam]:
+    def get_hyperparam_options(nb_tokens: int, nb_people: int) -> List[BoWModelInitParam]:
         sizes = [1,2,4,8]
         dims = [4,8,16,32,64,128,256]
         params = [BoWInitParamFactory.get_params_from_lengths(nb_tokens, nb_people, s, s, s, s, d, s, d) for s in sizes for d in dims]
