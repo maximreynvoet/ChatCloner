@@ -1,4 +1,7 @@
+import os
 import random
+
+from matplotlib.pyplot import savefig
 from datasource.MessageDB import MessageDB
 from datasource.conversation_parser import ConversationParser
 from datasource.datapoint_provider import DatapointProvider, FixedDatapointProvider
@@ -12,7 +15,6 @@ from utils.saving import Saving
 
 
 class EvalLossObserver(TrainingObserver):
-    
     
     def __init__(self, frequency: int, test_set: DatapointProvider, save_file: str) -> None:
         super().__init__()
@@ -28,14 +30,14 @@ class EvalLossObserver(TrainingObserver):
             Saving.write_str_to_file(f"Loss at {self._counter}: {loss}", self._save_file)
 
     @staticmethod
-    def from_params(frequency: int, nb_messages: int, window_size: int, interface: BOWInterface) -> 'EvalLossObserver':
+    def from_params(frequency: int, nb_messages: int, window_size: int, interface: BOWInterface, save_file: str) -> 'EvalLossObserver':
         # TODO te lange init, te veel params. Nood aan tokenizer in de interface -> niet goed
         msgs = Conversation(MessageDB.get_instance().get_test_messages(nb_messages, Examples.RANDOM_SEED))
         dps = ConversationParser().parse(msgs, window_size, interface._tokenizer)
         random.shuffle(dps)
         provider = FixedDatapointProvider(dps)
-        return EvalLossObserver(frequency, provider, "")
+        return EvalLossObserver(frequency, provider, save_file)
     
     @staticmethod
-    def get_default_instance(frequency: int, interface: BOWInterface) -> 'EvalLossObserver':
-        return EvalLossObserver.from_params(frequency, 64, 128, interface)
+    def get_default_instance(save_dir: str, interface: BOWInterface, frequency: int) -> 'EvalLossObserver':
+        return EvalLossObserver.from_params(frequency, 64, 128, interface, os.path.join(save_dir, "loss.txt"))

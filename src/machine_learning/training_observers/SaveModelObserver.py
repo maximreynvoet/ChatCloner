@@ -19,5 +19,5 @@ class SaveModelObserver(TrainingObserver):
             Saving.save_bow_model(model, os.path.join(self._save_dir, f"Model_iter_{self._counter}.pth"))
 
     @staticmethod
-    def get_default_instance(model_name: str, frequency: int) -> 'SaveModelObserver':
-        return SaveModelObserver(frequency, f"../output/{model_name}")
+    def get_default_instance(save_dir: str, frequency: int) -> 'SaveModelObserver':
+        return SaveModelObserver(frequency, save_dir)

@@ -1,14 +1,15 @@
 
+import os
 from typing import Collection
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.TextPredictor import PytorchTextPredictor
+from machine_learning.training_observers.EvalLossObserver import EvalLossObserver
 from machine_learning.training_observers.SaveModelObserver import SaveModelObserver
 from machine_learning.training_observers.TestModelObserver import TestModelObserver
 
 
 """
 TODO ik ben niet zoooo blij dat het een pytorchTextPredictor zou moeten zijn als param
-TODO nog een observer om loss te zien op een mini set
 """
 
 class TrainingObserver:
@@ -24,9 +25,12 @@ class TrainingObserver:
 
     @staticmethod
     def get_default_train_observers(model_name: str, interface: BOWInterface, frequency: int) -> 'TrainingObserver':
+        save_dir = f"../output/{model_name}"
+        test_path = os.path.join(save_dir, "inferences.txt")
         return CombinedTrainingsObserver([
-            TestModelObserver.get_default_instance(model_name, interface, frequency),
-            SaveModelObserver.get_default_instance(model_name, frequency)
+            TestModelObserver.get_default_instance(test_path, interface, frequency),
+            SaveModelObserver.get_default_instance(save_dir, frequency),
+            EvalLossObserver.get_default_instance(model_name, interface, frequency)
         ])
 
 class CombinedTrainingsObserver(TrainingObserver):

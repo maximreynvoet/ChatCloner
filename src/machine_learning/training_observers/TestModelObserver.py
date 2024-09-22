@@ -25,10 +25,10 @@ class TestModelObserver(TrainingObserver):
         self._prediction_params = prediction_params
 
     @staticmethod
-    def get_default_instance(model_name: str, interface: BOWInterface, frequency: int) -> 'TestModelObserver':
+    def get_default_instance(save_file_path: str, interface: BOWInterface, frequency: int) -> 'TestModelObserver':
         return TestModelObserver(interface,
                                      frequency,
-                                     f"../output/{model_name}",
+                                     save_file_path,
                                      Examples.example_convo,
                                      PredictConvoParams.get_default_params())
         ...
