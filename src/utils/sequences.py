@@ -1,3 +1,5 @@
+from functools import reduce
+from operator import mul
 from typing import List
 
 
@@ -68,6 +70,16 @@ class Sequences:
     def repeat_sequence(value: int, repeat: int) -> List[int]:
         "Returns the list that is 'value' repeated 'repeat' times "
         return [value] * repeat
+    
+    @staticmethod
+    def encoder_sequence(input_size: int, output_size: int, latent_size: int, length_in: int, length_out: int) -> List[int]:
+        input_seq = Sequences.linear_sequence_step(input_size, latent_size, length_in)
+        output_seq = Sequences.linear_sequence_step(latent_size, output_size, length_out)
+        return input_seq + output_seq[1:] # Do not count the double int in between
+    
+    @staticmethod
+    def sequence_product(sequence: List[int]) -> int:
+        return reduce(mul, sequence, 1)
         
 def test_reduce_power():
     "TODO waar moeten de testen ?"

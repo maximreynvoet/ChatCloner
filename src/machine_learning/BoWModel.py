@@ -12,6 +12,8 @@ from machine_learning.fully_connected import FullyConnectedModule
     
 from machine_learning.training_observers.train_watcher import TrainingObserver
 
+_TOKEN_PREDICTION_FOCUS = 0.8
+
 class BoWModel(PytorchTextPredictor):
     """Simple bag of words model
     We model this by a joint network (or siamese network, whatever term you like most)
@@ -52,7 +54,8 @@ class BoWModel(PytorchTextPredictor):
         """
         token_loss = F.cross_entropy(pred_out.token_prob, true_out.token_prob)
         talker_loss= F.cross_entropy(pred_out.talker_prob, true_out.talker_prob)
-        return token_loss + talker_loss
+        p = _TOKEN_PREDICTION_FOCUS
+        return p * token_loss + (1-p * talker_loss)
 
     def estimate_loss(self, test_set: DatapointProvider) -> float:
         prev_state_training = self.training

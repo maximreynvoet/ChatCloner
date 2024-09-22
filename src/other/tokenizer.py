@@ -14,7 +14,7 @@ class Tokenizer:
     _INSTANCE = None
 
     "TODO dit w beetje overal accessed, niet goed, maar beste manier tot nu toe om niet overal de tokenizer te moeten laten passeren"
-    NUMBER_TOKENS = 1024
+    NUMBER_TOKENS = 256
 
     def sentence_to_tokens(self, sentence: str) -> List[Token]:
         return self._model.encode(sentence).ids

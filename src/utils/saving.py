@@ -1,12 +1,17 @@
+import os
 import torch.nn as nn
 import torch
 
 from machine_learning.BoWModel import BoWModel
 
+def _create_path_if_not_exist(path: str) -> None:
+        os.makedirs(path, exist_ok=True)
+
 class Saving:
     
     @staticmethod
-    def save_bow_model(model: BoWModel, path: str) -> None:   
+    def save_bow_model(model: BoWModel, path: str) -> None:
+        _create_path_if_not_exist(path)
         torch.save(
             {
                 "state": model.state_dict(),
@@ -24,10 +29,14 @@ class Saving:
     
     @staticmethod
     def write_str_to_file(string: str, file: str) -> None:
+        _create_path_if_not_exist(file)
         with open(file, "a") as f:
             f.write(string)
 
     @staticmethod
     def clear_file(file: str) -> None:
-        with open(file, "w") as f:
-            pass
+        try:
+            with open(file, "w") as f:
+                pass
+        except:
+            pass # Could not clear a file who does not exist -> no problem

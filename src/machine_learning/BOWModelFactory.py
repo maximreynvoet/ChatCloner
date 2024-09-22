@@ -1,6 +1,6 @@
+from machine_learning.BoWInitParamFactory import BoWInitParamFactory
 from machine_learning.BoWModel import BoWModel
 from machine_learning.BoWModelInitParam import BoWModelInitParam
-from machine_learning.fully_connected import FullyConnectedModule
 
 class BOWModelFactory:
     @staticmethod
@@ -12,12 +12,10 @@ class BOWModelFactory:
             - random search
             - grid search
             - genetic algorithm (als echt yolo; zeer zeer duur, vele evaluaties nodig)
-
-        nb_tokens: ongeveer 256 ish
-        nb_people: 4-8
         """
-        params = BoWModelInitParam.get_default_param(nb_people=nb_people, nb_tokens= nb_tokens)
-        return BoWModel(params)
+        return BOWModelFactory.get_model_from_params(
+            BoWInitParamFactory.get_default_params()
+        )
     
     @staticmethod
     def get_model_from_params(params: BoWModelInitParam) -> BoWModel:
