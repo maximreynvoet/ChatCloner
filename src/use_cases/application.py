@@ -1,19 +1,16 @@
-from cgi import print_arguments
 import random
 from datasource.MessageDB import MessageDB
 from datasource.conversation_parser import ConversationParser
-from datasource.datapoint_provider import DatapointProvider, FixedDatapointProvider
-from datatypes.Conversation import Conversation
+from datasource.datapoint_provider import FixedDatapointProvider
 from datatypes.Person import PersonManager
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BOWModelFactory import BOWModelFactory
-from machine_learning.BoWModel import BoWModel
 from machine_learning.predict_convo_params import PredictConvoParams
-from machine_learning.train_watcher import ContinueConvoObserver, TrainingObserver
+from machine_learning.train_watcher import TestModelObserver
 from other.tokenizer import Tokenizer
+from use_cases.UseCases import UseCases
 from utils.examples import Examples
 from utils.saving import Saving
-from utils.utils import Utils
 
 
 def generate_model():
@@ -37,26 +34,15 @@ def generate_model():
     test_convo = Examples.example_convo
     interface = BOWInterface(model)
     prediction_params = PredictConvoParams(32, 128, 1)
-    observer = ContinueConvoObserver(interface, 10_000, "../output/mini_bowwow.txt", test_convo, prediction_params)
+    observer = TestModelObserver(interface, 10_000, "../output/mini_bowwow.txt", test_convo, prediction_params)
     
     model.train_model(provider, 1, observer)
 
     Saving.save_bow_model(model, "../models/bowwow.pth") # With love that is my hero bowwow
 
 def test_model():
-    model = Saving.load_bow_model("../models/bowwow.pth")
-    conversation = Examples.example_convo
-    interface = BOWInterface(model)
-    
-
-    for temperature in [0.01, 0.1, 0.3, 0.5, 0.8, 1, 1.2, 1.5, 1.8, 2, 3]:
-        predicted = interface.predict_convo_continuation(Conversation(conversation.copy()), 128, temperature, 128)
-        print(f"Predicting continuation at temperature {temperature}")
-        print(predicted)
-
-    print(5)
-
-    
+    model = Saving.load_bow_model("../model.bowwow.pth")
+    UseCases.test_model_at_temperatures(model)
 
 if __name__ == "__main__":
     # test_model()

@@ -19,4 +19,6 @@ class BOWModelFactory:
         params = BoWModelInitParam.get_default_param(nb_people=nb_people, nb_tokens= nb_tokens)
         return BoWModel(params)
     
-    
+    @staticmethod
+    def get_model_from_params(params: BoWModelInitParam) -> BoWModel:
+        return BoWModel(params)

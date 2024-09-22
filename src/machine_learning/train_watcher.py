@@ -11,7 +11,7 @@ from utils.saving import Saving
 
 """
 TODO ik ben niet zoooo blij dat het een pytorchTextPredictor zou moeten zijn als param
-TODO ook ene voor model te saven (checkpointen)
+TODO nog een observer om loss te zien op een mini set
 """
 
 class TrainingObserver:
