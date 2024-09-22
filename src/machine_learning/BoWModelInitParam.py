@@ -1,8 +1,6 @@
 from typing import List
 from attr import dataclass
 
-from datatypes.Person import PersonManager
-from other.tokenizer import Tokenizer
 from utils.sequences import Sequences
 
 

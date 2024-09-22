@@ -41,6 +41,7 @@ class Sequences:
     @staticmethod
     def linear_sequence_size(start: int, end: int, size: int) -> List[int]:
         """Returns the sequence of size size, starting with start and ending with end, where every value changes linearly"""
+        if size == 1: return [start, end]
         step = (end - start) / (size-1)
         return [int(start + i * step) for i in range(size)]
     

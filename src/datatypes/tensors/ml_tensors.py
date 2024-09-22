@@ -54,7 +54,8 @@ class BOWInputTensor(MLInputTensor):
     @staticmethod
     def from_datapoint(dp: DataPoint) -> 'BOWInputTensor':
         token_indices = torch.tensor(dp.prev_tokens)
-        token_counts =  torch.bincount(token_indices, minlength= Tokenizer.NUMBER_TOKENS).as_subclass(TokenCountTensor)
+        if token_indices.numel() == 0: token_counts = torch.zeros(Tokenizer.NUMBER_TOKENS).as_subclass(TokenCountTensor)
+        else: token_counts =  torch.bincount(token_indices, minlength= Tokenizer.NUMBER_TOKENS).as_subclass(TokenCountTensor)
         
         talker_idx = dp.current_talker.to_int()
         talker_tensor = Utils.get_one_hot_tensor(PersonManager.get_nb_persons(), talker_idx).as_subclass(TalkerTensor)

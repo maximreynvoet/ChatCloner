@@ -1,5 +1,8 @@
 import os
+
+from attr import dataclass
 from datatypes.Conversation import Conversation
+from datatypes.datapoint import DataPoint
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BoWModel import BoWModel
 from machine_learning.BoWModelInitParam import BoWModelInitParam
@@ -10,7 +13,7 @@ from utils.examples import Examples
 import random
 from datasource.MessageDB import MessageDB
 from datasource.conversation_parser import ConversationParser
-from datasource.datapoint_provider import FixedDatapointProvider
+from datasource.datapoint_provider import DatapointProvider, FixedDatapointProvider
 from datatypes.Person import PersonManager
 from machine_learning.BOWModelFactory import BOWModelFactory
 from machine_learning.training_observers.train_watcher import TrainingObserver
@@ -35,20 +38,28 @@ class UseCases:
         print(5)
 
     @staticmethod
-    def interactive_train(model_params: BoWModelInitParam, save_dir: str, nb_epochs: int) -> BoWModel:
-        "Use case that trains the model and performs intermediate saving and output showing"
+    def get_training_provider(selection_params: 'DatapointSelectorParameters') -> DatapointProvider:
         nb_tokens = Tokenizer.NUMBER_TOKENS
         nb_people = PersonManager.get_nb_persons()
         tokenizer = Tokenizer._generate_tokenizer(nb_tokens)
-        window_size = 32  # BOW model -> we are able to have a large window
+        window_size = selection_params.window_size
 
-        messages = MessageDB.get_instance().get_messages()
+        messages = MessageDB.get_instance().get_message_sample(selection_params.nb_messages)
         conversation = Conversation(messages)
 
         datapoints = ConversationParser().parse(conversation, window_size, tokenizer)
-        augmented_datapoints = Utils.augment_datapoints(datapoints)
-        random.shuffle(augmented_datapoints)
-        provider = FixedDatapointProvider(augmented_datapoints)
+        augmented_datapoints = datapoints if not selection_params.augment_data else Utils.augment_datapoints(datapoints)
+        if selection_params.data_after_augment > 0: 
+            augmented_datapoints = random.sample(augmented_datapoints, selection_params.data_after_augment)
+        
+        provider = FixedDatapointProvider(augmented_datapoints, True)
+
+        return provider
+
+    @staticmethod
+    def interactive_train(model_params: BoWModelInitParam, save_dir: str, nb_epochs: int, datapoint_provider: DatapointProvider) -> BoWModel:
+        "Use case that trains the model and performs intermediate saving and output showing"
+        
 
         model = BOWModelFactory.get_model_from_params(model_params)
         nb_params: int = sum(p.numel() for p in model.parameters())
@@ -57,7 +68,20 @@ class UseCases:
         interface = BOWInterface(model)
         observer = TrainingObserverFactory.get_default_train_observers(save_dir, interface, 25_000)
         
-        losses = model.train_model(provider, nb_epochs, observer)
+        losses = model.train_model(datapoint_provider, nb_epochs, observer)
         Saving.write_str_to_file("\n".join(map(str, losses)), os.path.join(save_dir, "Losses.txt"))
+        Saving.save_bow_model(model, os.path.join(save_dir, f"TrainedModel_{nb_epochs=}"))
 
         return model
+
+
+@dataclass
+class DatapointSelectorParameters:
+    window_size: int
+    nb_messages: int # -1 if all messages
+    augment_data: bool
+    data_after_augment: int # -1 if keep maximum
+
+    @staticmethod
+    def get_default_instance() -> 'DatapointSelectorParameters':
+        return DatapointSelectorParameters(128, 5_000, True, 50_000)

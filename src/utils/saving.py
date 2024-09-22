@@ -5,7 +5,16 @@ import torch
 from machine_learning.BoWModel import BoWModel
 
 def _create_path_if_not_exist(path: str) -> None:
-        os.makedirs(path, exist_ok=True)
+    # Check if the path refers to a file or directory
+    if os.path.splitext(path)[1]:  # If path has a file extension
+        directory = os.path.dirname(path)  # Extract the directory part of the file path
+    else:
+        directory = path  # If it's a directory
+    
+    # Create the directory if it doesn't exist
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+
 
 class Saving:
     

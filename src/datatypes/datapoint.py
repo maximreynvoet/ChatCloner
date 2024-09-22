@@ -30,7 +30,11 @@ class DataPoint:
         """Returns all the datapoints you can get out of this one by data augmentation (removing all previous tokens)
         TODO dit maar niet recursief want python kills speed met recursion
         """
-        if len(self.prev_tokens) < min_tokens : return [self]
-        else: return [self] + self.minus_oldest().get_all_split()
+        result, dp = [], self
+        while len(dp.prev_tokens) >= min_tokens:
+            result.append(dp)
+            dp = dp.minus_oldest()
+        return result
+        
         
 

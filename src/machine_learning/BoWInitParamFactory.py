@@ -19,12 +19,13 @@ class BoWInitParamFactory:
     def get_params_from_lengths(nb_tokens: int, nb_people: int,
         token_in_length: int, token_out_length: int,
         people_in_length: int, people_out_length: int,
-        siamese_input: int, siamese_length: int, siamese_output: int
+        siamese_input_people: int, siamese_input_tokens: int,
+        siamese_length: int, siamese_output: int
         ):
-        
-        token_in_seq = Sequences.linear_sequence_size(nb_tokens, siamese_input, token_in_length)
-        people_in_seq = Sequences.linear_sequence_size(nb_people, siamese_input, people_in_length)
-        siamese_seq = Sequences.linear_sequence_size(siamese_input, siamese_output, siamese_length)
+        siamese_input_total = siamese_input_people + siamese_input_tokens
+        token_in_seq = Sequences.linear_sequence_size(nb_tokens, siamese_input_tokens, token_in_length)
+        people_in_seq = Sequences.linear_sequence_size(nb_people, siamese_input_people, people_in_length)
+        siamese_seq = Sequences.linear_sequence_size(siamese_input_total, siamese_output, siamese_length)
         token_out_seq = Sequences.linear_sequence_size(siamese_output, nb_tokens, token_out_length)
         people_out_seq = Sequences.linear_sequence_size(siamese_output, nb_people, people_out_length)
         
@@ -32,9 +33,11 @@ class BoWInitParamFactory:
     
     @staticmethod
     def get_hyperparam_options(nb_tokens: int, nb_people: int) -> List[BoWModelInitParam]:
-        sizes = [1,2,4,8]
-        dims = [4,8,16,32,64,128,256]
-        params = [BoWInitParamFactory.get_params_from_lengths(nb_tokens, nb_people, s, s, s, s, d, s, d) for s in sizes for d in dims]
+        lengths = [2,4,8]
+        token_siams = [4,8,16,32,64,128]
+        person_dim = [nb_people]
+        params = [BoWInitParamFactory.get_params_from_lengths(nb_tokens, nb_people, l, l, l, l, pd, td, l, td)
+                  for l in lengths for td in token_siams for pd in person_dim]
         return sorted(params, key= lambda x: x.approx_size())   
 
     @staticmethod

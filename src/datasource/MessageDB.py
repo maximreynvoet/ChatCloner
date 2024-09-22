@@ -8,6 +8,7 @@ from datatypes.Platform import Platform
 from typing import List, Set, Optional
 
 from datatypes.Person import Person
+from utils.examples import Examples
 
 
 class MessageDB:
@@ -20,7 +21,15 @@ class MessageDB:
     def get_messages(self) -> List[Message]:
         return self._messages
     
+    def get_message_sample(self, nb_messages: int) -> List[Message]:
+        if nb_messages > 0: return self.get_test_messages(nb_messages, Examples.RANDOM_SEED)
+        else: return self.get_messages()
+    
+    def get_nb_messages(self) -> int:
+        return len(self._messages)
+    
     def get_test_messages(self, nb_messages: int, random_seed: int) -> List[Message]:
+        if nb_messages > self.get_nb_messages(): return self._messages
         r = random.Random(random_seed)
         msg_range = len(self._messages) - nb_messages - 1
         start_pt = r.randint(0, msg_range)

@@ -5,7 +5,6 @@ from attr import dataclass
 
 from datatypes.Token import Token
 from tokenizers import Tokenizer as tkTokenizer, models, pre_tokenizers, decoders, processors, trainers
-from datasource.MessageDB import MessageDB
 
 @dataclass
 class Tokenizer:
@@ -77,6 +76,7 @@ class Tokenizer:
     
     @staticmethod
     def _generate_tokenizer(max_tokens: int) -> 'Tokenizer':
+        from datasource.MessageDB import MessageDB
         text = MessageDB.get_instance().get_all_ascii_text()
         return Tokenizer._generate_from(text, max_tokens)
 

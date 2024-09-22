@@ -3,7 +3,7 @@ from tqdm import tqdm
 from datatypes.Person import PersonManager
 from machine_learning.BoWInitParamFactory import BoWInitParamFactory
 from other.tokenizer import Tokenizer
-from use_cases.UseCases import UseCases
+from use_cases.UseCases import DatapointSelectorParameters, UseCases
 from utils.saving import Saving
 
 
@@ -15,8 +15,13 @@ def hyperparam_search():
     nb_tokens = Tokenizer.NUMBER_TOKENS
     nb_people = PersonManager.get_nb_persons()
     params = BoWInitParamFactory.get_hyperparam_options(nb_tokens, nb_people)
+    print("\n".join([str(x.approx_size()) for x in params]))
+
+    data_selector = DatapointSelectorParameters(128, 5_000, True, 50_000)
+    provider = UseCases.get_training_provider(data_selector)
+
     for i, setup in tqdm(enumerate(params), "Testing hyperparameter"):
-        UseCases.interactive_train(setup, f"Model_{i}_{setup.approx_size()}_params", 1)
+        UseCases.interactive_train(setup, f"../output/Model_{i}_{setup.approx_size()}_params", 1, provider)
 
 def test_model(model_path: str):
     model = Saving.load_bow_model(model_path)
@@ -25,6 +30,7 @@ def test_model(model_path: str):
 if __name__ == "__main__":
     # test_model()
     # generate_model()
-    train_model()
+    # train_model()
+    hyperparam_search()
     # test_model("../output/SimpleModel/Model_iter_100000.pth")
     # test_model("../output/SimpleModel/Model_iter_1000000.pth")

@@ -1,4 +1,5 @@
-from typing import Collection, Iterator
+import random
+from typing import Collection, Iterator, List
 
 from attr import dataclass
 
@@ -27,9 +28,10 @@ class DatapointProvider():
 class FixedDatapointProvider(DatapointProvider):
     """A datapoint provider that works by first generating all datapoints, and then building an iterator on top of it
     This can be stringent on the memory for bigger datasets"""
-    def __init__(self, datapoints: Collection[DataPoint]) -> None:
+    def __init__(self, datapoints: List[DataPoint], shuffle: bool = True) -> None:
         super().__init__()
         self.datapoints = datapoints
+        if shuffle: random.shuffle(self.datapoints)
 
     def __iter__(self) -> Iterator[DataPoint]:
         return iter(self.datapoints)
