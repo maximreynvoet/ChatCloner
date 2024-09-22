@@ -8,7 +8,13 @@ from machine_learning.predict_convo_params import PredictConvoParams
 from utils.saving import Saving
 
 
-# TODO ik ben niet zoooo blij dat het een pytorchTextPredictor zou moeten zijn als param
+"""
+TODO ik ben niet zoooo blij dat het een pytorchTextPredictor zou moeten zijn als param
+TODO ook ene voor model te saven (checkpointen)
+TODO ook trainingsobserver combineren (zo kan je in een observer zowel eval als saven (op andere frequency dat is)) 
+    Of om ook inference te doen maar op / temperatuur
+"""
+
 
 class TrainingObserver:
     def at_new_training_instance(self, model: PytorchTextPredictor) -> None:

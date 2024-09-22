@@ -8,6 +8,8 @@ from datatypes.Person import PersonManager
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BOWModelFactory import BOWModelFactory
 from machine_learning.BoWModel import BoWModel
+from machine_learning.predict_convo_params import PredictConvoParams
+from machine_learning.train_watcher import ContinueConvoObserver, TrainingObserver
 from other.tokenizer import Tokenizer
 from utils.examples import Examples
 from utils.saving import Saving
@@ -34,11 +36,10 @@ def generate_model():
 
     test_convo = Examples.example_convo
     interface = BOWInterface(model)
-    def tussentijdse_eval(eval_nb):
-        if eval_nb % 10_000 == 0: print(interface.predict_convo_continuation(test_convo, 128, 1, 64))
-        
+    prediction_params = PredictConvoParams(32, 128, 1)
+    observer = ContinueConvoObserver(interface, 10_000, "../output/mini_bowwow.txt", test_convo, prediction_params)
     
-    model.train_model(provider, 1, tussentijdse_eval)
+    model.train_model(provider, 1, observer)
 
     Saving.save_bow_model(model, "../models/bowwow.pth") # With love that is my hero bowwow
 
