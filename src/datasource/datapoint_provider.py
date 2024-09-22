@@ -17,7 +17,11 @@ TODO ook de len function implementeren
 
 
 class DatapointProvider():
-    ...
+    def __iter__(self) -> Iterator[DataPoint]:
+        ...
+
+    def __len__(self) -> int:
+        ...
 
 
 class FixedDatapointProvider(DatapointProvider):

@@ -1,6 +1,7 @@
-from typing import Callable
+from typing import Callable, Collection
 from tqdm import tqdm
 from datasource.datapoint_provider import DatapointProvider
+from datatypes.datapoint import DataPoint
 from datatypes.tensors.ml_tensors import BOWInputTensor, BOWOutputTensor, MLOutputTensor
 from machine_learning.BoWModelInitParam import BoWModelInitParam
 from machine_learning.TextPredictor import PytorchTextPredictor
@@ -55,6 +56,22 @@ class BoWModel(PytorchTextPredictor):
         token_loss = F.cross_entropy(pred_out.token_prob, true_out.token_prob)
         talker_loss= F.cross_entropy(pred_out.talker_prob, true_out.talker_prob)
         return token_loss + talker_loss
+
+    def estimate_loss(self, test_set: DatapointProvider) -> float:
+        prev_state_training = self.training
+        self.eval()
+       
+        loss = 0
+        for dp in tqdm(test_set, "Evaluating loss"):
+            # Forward pass: compute predicted outputs by passing inputs to the model
+            input_tensor = BOWInputTensor.from_datapoint(dp)
+            output_tensor = self.forward(input_tensor)
+            truth_tensor = BOWOutputTensor.from_datapoint(dp)
+            
+            loss += BoWModel.loss(output_tensor, truth_tensor).item()
+            
+        self.train(prev_state_training) # Reset state to what it was
+        return loss
 
     def train_model(self, data_provider: DatapointProvider, num_epochs: int, training_observer: TrainingObserver) -> None:
         

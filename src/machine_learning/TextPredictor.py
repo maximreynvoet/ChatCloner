@@ -1,5 +1,6 @@
 import torch.nn as nn
 
+from datasource.datapoint_provider import DatapointProvider
 from datatypes.tensors.ml_tensors import MLInputTensor, MLOutputTensor
 
 """
@@ -27,4 +28,5 @@ class TextPredictor():
         ...
 
 class PytorchTextPredictor(TextPredictor, nn.Module):
-    ...
+    def estimate_loss(self, test_set: DatapointProvider) -> float:
+        ...

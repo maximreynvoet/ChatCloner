@@ -12,6 +12,7 @@ TODO nog een observer om loss te zien op een mini set
 """
 
 class TrainingObserver:
+    # TODO elke subclass heeft counter behavior, zet dit in superclass
     def combined_with(self, other: 'TrainingObserver') -> 'TrainingObserver':
         # Return a new observer whose update function calls the first one and then the other one
         return CombinedTrainingsObserver([self, other])
@@ -36,7 +37,4 @@ class CombinedTrainingsObserver(TrainingObserver):
 
     def update(self, model) -> None:
         [m.at_new_training_instance(model) for m in self._observers]
-
-
-
 
