@@ -1,4 +1,5 @@
 import os
+from typing import List
 import torch.nn as nn
 import torch
 
@@ -49,3 +50,11 @@ class Saving:
                 pass
         except:
             pass # Could not clear a file who does not exist -> no problem
+
+    @staticmethod
+    def load_strings(file: str) -> List[str]:
+        try:
+            with open(file, "r") as f:
+                return f.readlines()
+        except:
+            return []

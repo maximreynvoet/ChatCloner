@@ -24,3 +24,4 @@ def get_data() -> List[Tuple[int, int]]:
 
 if __name__ == "__main__":
     print(get_data())
+
