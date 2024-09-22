@@ -9,8 +9,8 @@ from datatypes.Message import Message
 from datatypes.MessageFragment import MessageFragment
 from datatypes.datapoint import DataPoint
 from datatypes.tensors.ml_tensors import MLInputTensor, MLOutputTensor
+from machine_learning.predict_convo_params import PredictConvoParams
 from other.tokenizer import Tokenizer
-
 
 class MLInterface:
     """
@@ -26,16 +26,17 @@ class MLInterface:
         self._tokenizer = Tokenizer.get_instance()
         self._nb_tokens = self._tokenizer.get_nb_tokens()
 
-    "TODO hoe modellen van X praat (kan niet in een str zijn)"
 
-    def predict_convo_continuation(self, conversation: Conversation, nb_fragments: int, temperature: float, window_size: int) -> 'Conversation':
+    def predict_convo_continuation(self, params: PredictConvoParams, conversation: Conversation) -> 'Conversation':
         """Continues the conversation by doing a number of iterations on the ml model
         Returns a new (copy) of a new conversation"""
-        input_dp = self.convo_to_dp(conversation, window_size)
-        fragments = self._predict_next_fragments(nb_fragments, input_dp, temperature)
-        prediction = Conversation(conversation.copy())
-        [prediction.add_message_fragment(f) for f in fragments]
-        return prediction
+        conv = conversation.deep_copy()
+        input_dp = self.convo_to_dp(conv, params.window_size)
+        fragments = self._predict_next_fragments(params.nb_fragments, input_dp, params.temperature)
+        
+        for f in fragments: 
+            conv.add_message_fragment(f)
+        return conv
 
     def _predict_next_fragments(self, nb_passes: int, input_dp: DataPoint, temperature: float) -> List[MessageFragment]:
         input = self._dp_to_model_in(input_dp)

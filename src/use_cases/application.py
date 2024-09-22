@@ -36,6 +36,7 @@ def generate_model():
     interface = BOWInterface(model)
     def tussentijdse_eval(eval_nb):
         if eval_nb % 10_000 == 0: print(interface.predict_convo_continuation(test_convo, 128, 1, 64))
+        
     
     model.train_model(provider, 1, tussentijdse_eval)
 

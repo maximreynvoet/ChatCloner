@@ -1,3 +1,4 @@
+import copy
 from datatypes.Message import Message
 
 
@@ -7,7 +8,7 @@ from typing import List
 from datatypes.MessageFragment import MessageFragment
 
 
-class Conversation(List[Message]): # TODO gebruiken als type hint overal waar nodig
+class Conversation(List[Message]):
     
 
     def get_last_message(self) -> Message:
@@ -21,3 +22,6 @@ class Conversation(List[Message]): # TODO gebruiken als type hint overal waar no
 
     def __str__(self) -> str:
         return "\n".join(map(str, self))
+    
+    def deep_copy(self) -> "Conversation":
+        return copy.deepcopy(self)

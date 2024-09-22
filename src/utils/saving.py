@@ -21,3 +21,13 @@ class Saving:
         loaded_model.load_state_dict(checkpoint['state'])
         
         return loaded_model
+    
+    @staticmethod
+    def write_str_to_file(string: str, file: str) -> None:
+        with open(file, "w") as f:
+            f.write(string)
+
+    @staticmethod
+    def clear_file(file: str) -> None:
+        with open(file, "w") as f:
+            pass
