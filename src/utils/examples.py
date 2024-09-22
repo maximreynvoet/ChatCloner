@@ -12,3 +12,5 @@ class Examples:
     victor_punchline= Message("Op het einde winnen we I guess", Person.VICTOR.to_str())
 
     example_convo = Conversation([victor_yo_msg, maxim_cv, victor_punchline])
+
+    RANDOM_SEED = 2019_05_07

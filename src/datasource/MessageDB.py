@@ -1,3 +1,4 @@
+import random
 from datasource.JsonRepo import JsonRepo
 from datasource.MessageReader import MessengerMessageReader, DiscordMessageReader
 from datatypes.Message import Message
@@ -18,6 +19,12 @@ class MessageDB:
 
     def get_messages(self) -> List[Message]:
         return self._messages
+    
+    def get_test_messages(self, nb_messages: int, random_seed: int) -> List[Message]:
+        r = random.Random(random_seed)
+        msg_range = len(self._messages) - nb_messages - 1
+        start_pt = r.randint(0, msg_range)
+        return self._messages[start_pt:start_pt+nb_messages]
 
     @staticmethod
     def get_instance() -> "MessageDB":
