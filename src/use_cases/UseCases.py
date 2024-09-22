@@ -49,6 +49,8 @@ class UseCases:
         provider = FixedDatapointProvider(augmented_datapoints)
 
         model = BOWModelFactory.get_model_from_params(model_params)
+        nb_params: int = sum(p.numel() for p in model.parameters())
+        print(f"Training model with {nb_params=}")
 
         interface = BOWInterface(model)
         observer = TrainingObserver.get_default_train_observers(model_name, interface, 10_000)

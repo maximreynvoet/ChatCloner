@@ -5,6 +5,7 @@ from datasource.datapoint_provider import FixedDatapointProvider
 from datatypes.Person import PersonManager
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.BOWModelFactory import BOWModelFactory
+from machine_learning.BoWModelInitParam import BoWModelInitParam
 from machine_learning.predict_convo_params import PredictConvoParams
 from machine_learning.training_observers.TestModelObserver import TestModelObserver
 from other.tokenizer import Tokenizer
@@ -39,6 +40,10 @@ def generate_model():
     model.train_model(provider, 1, observer)
 
     Saving.save_bow_model(model, "../models/bowwow.pth") # With love that is my hero bowwow
+
+def train_model():
+    params = BoWModelInitParam.get_default_param()
+    UseCases.interactive_train(params, "SimpleModel", 1)
 
 def test_model():
     model = Saving.load_bow_model("../model.bowwow.pth")

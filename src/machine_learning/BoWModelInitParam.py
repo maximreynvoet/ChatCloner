@@ -1,6 +1,8 @@
 from typing import List
 from attr import dataclass
 
+from datatypes.Person import PersonManager
+from other.tokenizer import Tokenizer
 from utils.sequences import Sequences
 
 
@@ -20,15 +22,22 @@ class BoWModelInitParam:
     leaky_relu_slope: float
 
     @staticmethod
-    def get_default_param(nb_people: int, nb_tokens: int) -> "BoWModelInitParam":
+    def get_default_param() -> "BoWModelInitParam":
+        # TODO ezo nie e
+
+        nb_people = PersonManager.get_nb_persons()
+        nb_tokens = Tokenizer.NUMBER_TOKENS
+        return BoWModelInitParam.get_params_from_power(nb_people, nb_tokens, 0.5, 0.5)
+        
+    
+    @staticmethod
+    def get_params_from_power(nb_people: int, nb_tokens: int, token_in_power: float, siam_out_power: float) -> 'BoWModelInitParam':
         token_siamese_in = 64
         people_siamese_in = nb_people
         people_repeat = 4
         siamese_repeat = 4
         siamese_in = token_siamese_in + people_siamese_in
         siamese_out = siamese_in
-        token_in_power = 0.5
-        siam_out_power = 0.5
 
         # token_in_power = 0.9
         # siam_out_power = 0.8
