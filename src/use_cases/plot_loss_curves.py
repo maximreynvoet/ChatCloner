@@ -36,7 +36,7 @@ def _load_loss_data(file_path: str) -> List[float]:
 def get_all_losses() -> List[_ModelLoss]:
     return [_ModelLoss.from_dir(output_dir + "/" + d) for d in os.listdir(output_dir)]
 
-def plot_all_losses(smoothing: int, losses: List[_ModelLoss]):
+def plot_losses(smoothing: int, losses: List[_ModelLoss]):
     for ml in losses:
         data = smooth_data(ml.losses, smoothing)
         plt.plot(np.log(data), label= ml.model_name)
@@ -44,9 +44,6 @@ def plot_all_losses(smoothing: int, losses: List[_ModelLoss]):
     plt.legend()
     plt.show()
 
-def main():
-    losses = get_all_losses()
-    plot_all_losses(3000, losses)
-    
 if __name__ == "__main__":
-    main()
+    # plot_losses(3000, get_all_losses())
+    plot_losses(25_000, [_ModelLoss.from_dir("../output/Tiny_Model_0_2112_params")])

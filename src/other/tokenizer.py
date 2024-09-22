@@ -40,6 +40,10 @@ class Tokenizer:
             if t is None: break
             else: res.append((i, t))
         return res
+    
+    def get_token_str_mapping_description(self) -> str:
+        mapping = self.get_token_str_mapping()
+        return "\n".join(f"{x[0]}:{x[1]}" for x in mapping)
 
     @staticmethod
     def _generate_from(text: str, max_tokens: int) -> 'Tokenizer':

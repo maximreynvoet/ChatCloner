@@ -83,3 +83,11 @@ class DatapointSelectorParameters:
     @staticmethod
     def get_default_instance() -> 'DatapointSelectorParameters':
         return DatapointSelectorParameters(128, 5_000, True, 50_000)
+    
+    @staticmethod
+    def get_large_context_window_instance() -> 'DatapointSelectorParameters':
+        return DatapointSelectorParameters(128, 5_000, True, 50_000)
+    
+    @staticmethod
+    def get_tiny_context_window_instance(window: int) -> 'DatapointSelectorParameters':
+        return DatapointSelectorParameters(window, -1, True, -1)
