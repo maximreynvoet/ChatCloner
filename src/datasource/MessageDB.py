@@ -1,6 +1,7 @@
 import random
 from datasource.JsonRepo import JsonRepo
 from datasource.MessageReader import MessengerMessageReader, DiscordMessageReader
+from datatypes.Conversation import Conversation
 from datatypes.Message import Message
 from datatypes.Platform import Platform
 
@@ -12,11 +13,15 @@ from utils.examples import Examples
 
 
 class MessageDB:
-    _messages: List[Message]
+    """TODO Functionality to have one conversation per chat message log (ene met enkel Ik + Maxim, ene met enkel Ik + Nick, ene voor groups chat, ...)
+    TODO save as list conversations, not simple messages
+    """
+
     _INSTANCE = None
 
     def __init__(self, messages: List[Message]) -> None:
         self._messages = messages
+        self._conversations = ...
 
     def get_messages(self) -> List[Message]:
         return self._messages
