@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from datatypes.Person import Person, PersonManager
+from datatypes.SerializedMessage import SerializedMessage
 
 
 @dataclass
@@ -18,3 +19,6 @@ class Message:
 
     def __str__(self) -> str:
         return f"{self.talker}: {self.content}"
+    
+    def serialized(self) -> SerializedMessage:
+        return SerializedMessage(f"[{self.get_talker().to_str()}]: {self.content}")

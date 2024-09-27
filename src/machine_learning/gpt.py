@@ -23,18 +23,16 @@ class GPTModel(nn.Module):
 
 class GPTDataset:
     @staticmethod
-    def from_convo_list(convos: List[SerializedConversation]) -> Dataset: # TODO mss param type as simple conversation if needed
-        return Dataset.from_dict({"Conversation": c for c in convos})
+    def from_convo_list(convos: SerializedConversationDB) -> Dataset: # TODO mss param type as simple conversation if needed
+        return Dataset.from_dict({"Conversation": c.to_single() for c in convos})
 
 class GPTTrainer:
 
     @staticmethod
-    def train_model(model: GPTModel, data: List[SerializedConversation]):
+    def train_model(model: GPTModel, data: SerializedConversationDB):
         tokenizer = GPTTokenizer.get_instance()
         ds = GPTDataset.from_convo_list(data)
-        tokenized_ds = ds.map(lambda ex: tokenizer(ex, 
-                                                #    padding="max_length", truncation= True
-                                                   ))
+        tokenized_ds = list(map(tokenizer, ds)) # TODO perhaps not good type, probably goed mss toch wel
 
         training_args = TrainingArguments(
             output_dir='./results',
@@ -50,8 +48,8 @@ class GPTTrainer:
         trainer = Trainer(
             model=model,
             args=training_args,
-            # train_dataset=tokenized_ds['train'],
-            # eval_dataset=tokenized_ds['validation'],
+            train_dataset=tokenized_ds, # TODO HIHI train en eval zijnt zelfde haha
+            eval_dataset=tokenized_ds, # TODO HIHI train en eval zijnt zelfde haha
         )
 
         # Fine-tune the model
