@@ -54,14 +54,17 @@ class GPTTrainer:
         ds = _load_ds_text()
 
         tokenizer.pad_token = tokenizer.eos_token
-        tokenize_function = lambda examples: tokenizer(examples['text'], padding='max_length', truncation=True, max_length=512)
+        
+        def tokenize_function(examples):
+            tokenized_inputs = tokenizer(examples['text'], padding='max_length', truncation=True, max_length=512)
+            tokenized_inputs['labels'] = tokenized_inputs['input_ids'].copy()  # Add labels
+            return tokenized_inputs
+        # tokenize_function = lambda examples: tokenizer(examples['text'], padding='max_length', truncation=True, max_length=512)
 
         tokenized_ds = ds.map(tokenize_function, batched=True)
 
-
-
         training_args = TrainingArguments(
-            output_dir='./results',
+            output_dir='../output/results',
             evaluation_strategy='epoch',
             learning_rate=2e-5,
             per_device_train_batch_size=2,
