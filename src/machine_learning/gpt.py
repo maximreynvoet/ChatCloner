@@ -8,12 +8,12 @@ from datatypes.Conversation import Conversation
 from datatypes.SerializedConversation import SerializedConversation
 from datatypes.SerializedConversationDB import SerializedConversationDB
 from utils.saving import Saving
-
+import transformers
 
 class GPTTokenizer:
 
     @staticmethod
-    def get_instance():
+    def get_instance() -> transformers.tokenization_utils_base.PreTrainedTokenizerBase:
         return GPT2Tokenizer.from_pretrained('gpt2')
 
 class GPTModel(nn.Module):
@@ -53,6 +53,7 @@ class GPTTrainer:
         # tokenized_ds = GPTDataset.tokenize_from_convos(data, tokenizer)
         ds = _load_ds_text()
 
+        tokenizer.pad_token = tokenizer.eos_token
         tokenize_function = lambda examples: tokenizer(examples['text'], padding='max_length', truncation=True, max_length=512)
 
         tokenized_ds = ds.map(tokenize_function, batched=True)
