@@ -9,8 +9,9 @@ class SerializedConversationDB(List[SerializedConversation]):
     
     @staticmethod
     def get_instance() -> 'SerializedConversationDB':
+        # TODO convert to multiple convos
         c = SerializedConversation.from_conversation(
-            Conversation(MessageDB.get_instance().get_messages())
+            Conversation(MessageDB.get_instance().get_messages(), "AllConvos")
         )
         return SerializedConversationDB([c])
         

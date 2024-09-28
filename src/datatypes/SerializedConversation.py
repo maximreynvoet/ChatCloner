@@ -12,7 +12,7 @@ class SerializedConversation:
     
     @staticmethod
     def from_conversation(conversation: Conversation) -> 'SerializedConversation':
-        return SerializedConversation([x.serialized() for x in conversation], conversation.name)
+        return SerializedConversation([x.serialized() for x in conversation.messages], conversation.name)
     
     def to_single_string(self) -> str:
         return "\n".join(self.messages)

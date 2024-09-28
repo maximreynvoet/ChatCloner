@@ -11,6 +11,6 @@ class Examples:
     nick_msg = Message("Ik heb daar zeer veel respect voor xx", Person.NICK.to_str())
     victor_punchline= Message("Op het einde winnen we I guess", Person.VICTOR.to_str())
 
-    example_convo = Conversation([victor_yo_msg, maxim_cv, victor_punchline])
+    example_convo = Conversation([victor_yo_msg, maxim_cv, victor_punchline], "test_convo")
 
     RANDOM_SEED = 2019_05_07
