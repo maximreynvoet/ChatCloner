@@ -72,6 +72,13 @@ class GPTTrainer:
             num_train_epochs=3,
             weight_decay=0.01,
         )
+        """
+        TODO in trainer
+            - Logging strategy `"steps"`: Logging is done every `logging_steps`.
+            - Saven elke X iters
+            Lezen wat de params zijn in de template file
+            Lezen wat de mogelijke params zijn in de doc
+        """
 
         # Initialize the Trainer
         trainer = Trainer(
@@ -85,6 +92,26 @@ class GPTTrainer:
         trainer.train()
     
 if __name__ == "__main__":
+    """
+    TODO eens de output lezen 
+        - 2024-09-28 12:42:31.961535: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+        - 2024-09-28 12:42:32.021214: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+        - To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+        - 2024-09-28 12:42:34.183699: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+        - /home/vico_ptp/.local/lib/python3.8/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+        - warnings.warn(
+        - /home/vico_ptp/.local/lib/python3.8/site-packages/transformers/training_args.py:1525: FutureWarning: `evaluation_strategy` is deprecated and will be removed in version 4.46 of 🤗 Transformers. Use `eval_strategy` instead
+        - warnings.warn(
+        - Detected kernel version 5.4.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+
+    TODO verstaan wat de code doet (beetje blind gecopy pasted oeioei)
+        -V 2024-09-28
+
+    TODO model opslaan en inferences mee doen (beetje zelfde script als BOWModel Trainen)
+    TODO GPU gebruiken indien mogelijk
+    TODO traint het model door voorbeelden at random?
+    TODO traint het model wel efficient door niet telkens van 0 te beginnen, maar door de vorige input verder op te bouwen ?
+    """
     model = GPTModel.get_pretrained()
     ds = SerializedConversationDB.get_instance()
     GPTTrainer.train_model(model, ds)
