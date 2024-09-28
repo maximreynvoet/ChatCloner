@@ -36,11 +36,11 @@ data_dir = "../data/SerializedConversations"
 
 def _load_ds_text() -> DatasetDict:
     if not Saving.path_exists(data_dir) or Saving.dir_empty(data_dir): _populate_serialized_dir()
-    return load_dataset('text', data_dir= {"train": data_dir}) # type: ignore
+    return load_dataset('text', data_dir= data_dir) # type: ignore
 
 def _populate_serialized_dir():
     for c in SerializedConversationDB.get_instance().get_conversations():
-        Saving.write_str_to_file(c.to_single_string(), os.path.join(data_dir, c.name))
+        Saving.write_str_to_file(c.to_single_string(), os.path.join(data_dir, c.name + ".txt"))
 
 class GPTTrainer:
 
