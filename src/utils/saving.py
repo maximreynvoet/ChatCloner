@@ -58,3 +58,12 @@ class Saving:
                 return f.readlines()
         except:
             return []
+    
+    # TODO methods to apart class
+    @staticmethod
+    def path_exists(path: str) -> bool:
+        return os.path.exists(path)
+    
+    @staticmethod
+    def dir_empty(path: str) -> bool:
+        return len(os.listdir(path)) == 0 or False

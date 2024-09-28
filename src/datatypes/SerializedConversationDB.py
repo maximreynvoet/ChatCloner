@@ -14,3 +14,5 @@ class SerializedConversationDB(List[SerializedConversation]):
         )
         return SerializedConversationDB([c])
         
+    def get_conversations(self):
+        return list(self)

@@ -1,11 +1,13 @@
+import os
 from typing import List
 from transformers import GPT2Tokenizer, GPT2LMHeadModel, Trainer, TrainingArguments
-from datasets import load_dataset, Dataset
+from datasets import load_dataset, Dataset, DatasetDict
 import torch.nn as nn
 from datasource.MessageDB import MessageDB
 from datatypes.Conversation import Conversation
 from datatypes.SerializedConversation import SerializedConversation
 from datatypes.SerializedConversationDB import SerializedConversationDB
+from utils.saving import Saving
 
 
 class GPTTokenizer:
@@ -24,15 +26,38 @@ class GPTModel(nn.Module):
 class GPTDataset:
     @staticmethod
     def from_convo_list(convos: SerializedConversationDB) -> Dataset: # TODO mss param type as simple conversation if needed
-        return Dataset.from_dict({"Conversation": c.to_single() for c in convos})
+        return Dataset.from_dict({"Conversation": c.to_single_string() for c in convos.get_conversations()})
+
+    @staticmethod
+    def tokenize_from_convos(convos: SerializedConversationDB, tokenizer) -> Dataset:
+        return Dataset.from_dict({"Conversation": tokenizer(c.to_single_string()) for c in convos.get_conversations()})
+
+data_dir = "../data/SerializedConversations"
+
+def _load_ds_text() -> DatasetDict:
+    if not Saving.path_exists(data_dir) or Saving.dir_empty(data_dir): _populate_serialized_dir()
+    return load_dataset('text', data_dir= {"train": data_dir}) # type: ignore
+
+def _populate_serialized_dir():
+    for c in SerializedConversationDB.get_instance().get_conversations():
+        Saving.write_str_to_file(c.to_single_string(), os.path.join(data_dir, c.name))
 
 class GPTTrainer:
 
     @staticmethod
     def train_model(model: GPTModel, data: SerializedConversationDB):
         tokenizer = GPTTokenizer.get_instance()
-        ds = GPTDataset.from_convo_list(data)
-        tokenized_ds = list(map(tokenizer, ds)) # TODO perhaps not good type, probably goed mss toch wel
+        # ds = GPTDataset.from_convo_list(data)
+        # tokenized_ds = list(map(tokenizer, ds)) # TODO perhaps not good type, probably goed mss toch wel
+
+        # tokenized_ds = GPTDataset.tokenize_from_convos(data, tokenizer)
+        ds = _load_ds_text()
+
+        tokenize_function = lambda examples: tokenizer(examples['text'], padding='max_length', truncation=True, max_length=512)
+
+        tokenized_ds = ds.map(tokenize_function, batched=True)
+
+
 
         training_args = TrainingArguments(
             output_dir='./results',
@@ -48,8 +73,8 @@ class GPTTrainer:
         trainer = Trainer(
             model=model,
             args=training_args,
-            train_dataset=tokenized_ds, # TODO HIHI train en eval zijnt zelfde haha
-            eval_dataset=tokenized_ds, # TODO HIHI train en eval zijnt zelfde haha
+            train_dataset=tokenized_ds["train"], # TODO HIHI train en eval zijnt zelfde haha
+            # eval_dataset=tokenized_ds,  # TODO HIHI train en eval zijnt zelfde haha
         )
 
         # Fine-tune the model

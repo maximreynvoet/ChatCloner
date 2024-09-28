@@ -1,15 +1,19 @@
+from dataclasses import dataclass
 from typing import List
 
 from datatypes.Conversation import Conversation
 from datatypes.Message import Message
 from datatypes.SerializedMessage import SerializedMessage
 
-class SerializedConversation(List[SerializedMessage]):
+@dataclass
+class SerializedConversation:
+    messages: List[SerializedMessage]
+    name: str
     
     @staticmethod
     def from_conversation(conversation: Conversation) -> 'SerializedConversation':
-        return SerializedConversation([x.serialized() for x in conversation])
+        return SerializedConversation([x.serialized() for x in conversation], conversation.name)
     
-    def to_single(self) -> str:
-        return "\n".join(self)
+    def to_single_string(self) -> str:
+        return "\n".join(self.messages)
     
