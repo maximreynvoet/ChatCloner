@@ -21,6 +21,17 @@ Omdat embedding size niet teee groot -> efficienter om trainen / gebruiken
 
 -V 2024-10-03 23:37
 
+
+---
+
+Kan ook kino zijn om meer te doen voor word representation learning
+- CBOW is cool
+- Skip-gram kan ook cool zijn
+    Basically taak is leer als woord Y in de context window is van X (anchor)
+    En hieruit leer je de representation
+- Nog andere 
+
+
 """
 class CBowModel(PytorchTextPredictor):
     ...
