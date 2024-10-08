@@ -83,25 +83,6 @@ class UseCases:
         return model
 
 
-    @staticmethod
-    def interactive_cbow_train(model: PytorchTextPredictor, save_dir: str, nb_epochs: int, datapoint_provider: DatapointProvider) -> CBowModel:
-        "Use case that trains the model and performs intermediate saving and output showing"
-        model = BOWModelFactory.get_model_from_params(model_params)
-        nb_params: int = sum(p.numel() for p in model.parameters())
-        print(f"Training model with {nb_params=}")
-
-        interface = BOWInterface(model)
-        observer = TrainingObserverFactory.get_default_train_observers(save_dir, interface, 25_000)
-        
-        trainer = ModelTrainer()
-        
-        losses = trainer.train_model(model, datapoint_provider, nb_epochs, observer)
-        Saving.write_str_to_file("\n".join(map(str, losses)), os.path.join(save_dir, "Losses.txt"))
-        Saving.save_bow_model(model, os.path.join(save_dir, f"TrainedModel_{nb_epochs=}.pth"))
-        Saving.write_str_to_file(model_params.describe(), os.path.join(save_dir, "ParamDescription.txt"))
-
-        return model
-
 @dataclass
 class DatapointSelectorParameters:
     window_size: int

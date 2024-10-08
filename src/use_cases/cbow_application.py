@@ -1,5 +1,6 @@
 from machine_learning.CBowInterFace import CBowInterFace
 from machine_learning.CBowModel import CBowModel
+from machine_learning.ModelTrainer import ModelTrainer
 from machine_learning.training_observers.TrainingObserverFactory import TrainingObserverFactory
 from other.tokenizer import Tokenizer
 from use_cases.UseCases import DatapointSelectorParameters, UseCases
@@ -14,7 +15,8 @@ def train_see_cbow():
     model = CBowModel(tokenizer.get_nb_tokens(), 64)
     dir = "../output/cbow"
     interface = CBowInterFace(model, range)
-    model.train_model(provider, 1, TrainingObserverFactory.get_default_train_observers(dir, interface, 25_000))
+    trainer = ModelTrainer()
+    trainer.train_cbow_model(model, provider, 1, TrainingObserverFactory.get_default_train_observers(dir, interface, 25_000))
 
 def cbow_main():
     train_see_cbow()

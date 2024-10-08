@@ -42,8 +42,8 @@ class BoWModel(PytorchTextPredictor):
         siamese_people = self._people_hidden(x.talker_tensor).as_subclass(torch.Tensor)
         siamese_in = torch.cat((siamese_tokens, siamese_people), dim=0)
         siamese_out = self._siamese_hidden(siamese_in)
-        token_out = self._token_out(siamese_out)
-        people_out = self._people_out(siamese_out)
+        token_out =  F.softmax(self._token_out(siamese_out))
+        people_out = F.softmax(self._people_out(siamese_out))
         return BOWOutputTensor(token_out, people_out)
 
     

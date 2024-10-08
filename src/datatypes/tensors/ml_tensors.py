@@ -26,7 +26,7 @@ class MLInputTensor:
     Every ML model is able to chose what this entails"""
 
 @dataclass
-class MLOutputTensor:
+class MLOutputTensor(torch.Tensor):
     """Base class that represents what a ML model outputs
     Every ML model must follow this convention"""
     token_prob: TokenProbabilityTensor
@@ -80,8 +80,17 @@ class CBOWInputTensor(MLInputTensor):
     def plus_previous_output(self, output: MessageFragment) -> 'CBOWInputTensor':
         token = Token(output.token_id)
         return CBOWInputTensor(self.tokens + [token])
+    
+    def get_tokens_as_tensor(self) -> List[torch.Tensor]:
+        return torch.tensor([token for token in self.tokens], dtype=torch.long)
 
-@dataclass
+
 class CBOWOutputTensor(TokenProbabilityTensor):
-    ...
-
+    
+    @staticmethod
+    def from_datapoint(dp: DataPoint):
+        "TODO maak de types kloppen"
+        return torch.tensor(dp.current_token, dtype= torch.long)
+        # token_tensor = Utils.get_one_hot_tensor(Tokenizer.NUMBER_TOKENS, dp.current_token)
+        # return MLOutputTensor(token_tensor, [])
+    

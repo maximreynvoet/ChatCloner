@@ -1,9 +1,11 @@
+import torch
 from datatypes.tensors.ml_tensors import BOWInputTensor
 from datatypes.tensors.ml_tensors import CBOWInputTensor
 from datatypes.tensors.ml_tensors import CBOWOutputTensor
 from datatypes.tensors.use_case_tensors import TokenProbabilityTensor
 from machine_learning.TextPredictor import PytorchTextPredictor
 import torch.nn as nn
+import torch.nn.functional as F
 
 """
 TODO organize
@@ -48,7 +50,18 @@ class CBowModel(PytorchTextPredictor):
         self._ffc = nn.Linear(self._embedding_size, self._nb_tokens)
 
     def forward(self, dp: CBOWInputTensor) -> CBOWOutputTensor:
-        embeddings = [self._embedder(t) for t in dp.tokens]
+        embeddings = [self._embedder(t) for t in dp.get_tokens_as_tensor()]
         embedding_sum = sum(embeddings)
-        token_distribution = self._ffc(embedding_sum)
-        return CBOWOutputTensor(TokenProbabilityTensor(token_distribution))
+        tokens = self._ffc(embedding_sum)
+        token_distrib = F.softmax(tokens)
+
+        return CBOWOutputTensor(TokenProbabilityTensor(token_distrib))
+    
+    def loss(self, pred_out: CBOWOutputTensor, true_out: CBOWOutputTensor) -> torch.Tensor:
+        """TODO mss niet in deze class ?
+        TODO ook mss andere weights voor token / person error?
+            En ook andere soort loss voor token of person (cross entropy, en een distance)
+        """
+        return F.cross_entropy(pred_out.as_subclass(torch.Tensor),
+                                true_out.as_subclass(torch.Tensor))
+        
