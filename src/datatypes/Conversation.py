@@ -12,6 +12,9 @@ class Conversation():
     messages: List[Message]
     name: str
 
+    def __iter__(self):
+        return iter(self.messages)
+
     def get_last_message(self) -> Message:
         return self.messages[-1]
     

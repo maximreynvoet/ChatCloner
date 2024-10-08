@@ -1,9 +1,6 @@
-from typing import List
-from tqdm import tqdm
 from datasource.datapoint_provider import DatapointProvider
-from datatypes.tensors.ml_tensors import BOWInputTensor, BOWOutputTensor, MLOutputTensor
+from datatypes.tensors.ml_tensors import MLOutputTensor
 
-import torch.optim as optim
 
 import torch.nn as nn
 
