@@ -3,10 +3,11 @@ import os
 
 from machine_learning.BOWInterface import BOWInterface
 from machine_learning.MLInterface import MLInterface
+from machine_learning.training_observers.train_watcher import CombinedTrainingsObserver
 from machine_learning.training_observers.EvalLossObserver import EvalLossObserver
 from machine_learning.training_observers.SaveModelObserver import SaveModelObserver
 from machine_learning.training_observers.TestModelObserver import TestModelObserver
-from machine_learning.training_observers.train_watcher import CombinedTrainingsObserver, TrainingObserver
+from machine_learning.training_observers.train_watcher import TrainingObserver
 
 
 class TrainingObserverFactory:

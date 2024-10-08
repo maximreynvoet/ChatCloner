@@ -1,5 +1,3 @@
-from dbus import Interface
-from datasource.datapoint_provider import DatapointProvider
 from machine_learning.CBowInterFace import CBowInterFace
 from machine_learning.CBowModel import CBowModel
 from machine_learning.training_observers.TrainingObserverFactory import TrainingObserverFactory
@@ -19,7 +17,7 @@ def train_see_cbow():
     model.train_model(provider, 1, TrainingObserverFactory.get_default_train_observers(dir, interface, 25_000))
 
 def cbow_main():
-    use_case()
+    train_see_cbow()
 
 if __name__ == "__main__":
     cbow_main()

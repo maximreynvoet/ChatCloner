@@ -45,7 +45,7 @@ class UseCases:
         window_size = selection_params.window_size
 
         messages = MessageDB.get_instance().get_message_sample(selection_params.nb_messages)
-        conversation = Conversation(messages)
+        conversation = Conversation(messages, "All messages")
 
         datapoints = ConversationParser().parse(conversation, window_size, tokenizer)
         augmented_datapoints = datapoints if not selection_params.augment_data else Utils.augment_datapoints(datapoints)

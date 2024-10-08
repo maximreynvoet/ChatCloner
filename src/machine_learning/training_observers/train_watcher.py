@@ -1,12 +1,13 @@
 
-from typing import Collection
 
+from typing import Collection
 from machine_learning.TextPredictor import PytorchTextPredictor
 
 
 """
 TODO ik ben niet zoooo blij dat het een pytorchTextPredictor zou moeten zijn als param
 """
+
 
 class TrainingObserver:
     # TODO elke subclass heeft counter behavior, zet dit in superclass
@@ -27,5 +28,3 @@ class CombinedTrainingsObserver(TrainingObserver):
 
     def at_new_training_instance(self, model: PytorchTextPredictor) -> None:
         [m.at_new_training_instance(model) for m in self._observers]
-       
-

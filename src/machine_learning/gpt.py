@@ -1,11 +1,7 @@
 import os
-from typing import List
 from transformers import GPT2Tokenizer, GPT2LMHeadModel, Trainer, TrainingArguments
 from datasets import load_dataset, Dataset, DatasetDict
 import torch.nn as nn
-from datasource.MessageDB import MessageDB
-from datatypes.Conversation import Conversation
-from datatypes.SerializedConversation import SerializedConversation
 from datatypes.SerializedConversationDB import SerializedConversationDB
 from utils.saving import Saving
 import transformers
