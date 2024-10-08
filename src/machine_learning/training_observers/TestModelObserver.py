@@ -1,5 +1,6 @@
 from datatypes.Conversation import Conversation
 from machine_learning.BOWInterface import BOWInterface
+from machine_learning.MLInterface import MLInterface
 from machine_learning.TextPredictor import PytorchTextPredictor
 from machine_learning.predict_convo_params import PredictConvoParams
 from machine_learning.training_observers.train_watcher import TrainingObserver
@@ -11,7 +12,7 @@ class TestModelObserver(TrainingObserver):
     "Class that continues a test conversation every n trainings examples"
 
     def __init__(self,
-                 interface: BOWInterface,
+                 interface: MLInterface,
                  activation_frequency: int,
                  save_file: str,
                  test_convo: Conversation,
@@ -25,7 +26,7 @@ class TestModelObserver(TrainingObserver):
         self._prediction_params = prediction_params
 
     @staticmethod
-    def get_default_instance(save_file_path: str, interface: BOWInterface, frequency: int) -> 'TestModelObserver':
+    def get_default_instance(save_file_path: str, interface: MLInterface, frequency: int) -> 'TestModelObserver':
         return TestModelObserver(interface,
                                      frequency,
                                      save_file_path,

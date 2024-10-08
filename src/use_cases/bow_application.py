@@ -7,10 +7,9 @@ from utils.saving import Saving
 
 def train_model():
     params = BoWInitParamFactory.get_default_params()
-    UseCases.interactive_train(params, "SimpleModel", 1)
+    UseCases.interactive_bow_train(params, "SimpleModel", 1)
 
 def hyperparam_search():
-    print(Tokenizer.get_instance().get_token_str_mapping_description())
     nb_tokens = Tokenizer.NUMBER_TOKENS
     nb_people = PersonManager.get_nb_persons()
     params = BoWInitParamFactory.get_hyperparam_options(nb_tokens, nb_people)
@@ -21,7 +20,7 @@ def hyperparam_search():
     provider = UseCases.get_training_provider(data_selector)
 
     for i, setup in tqdm(enumerate(params), "Testing hyperparameter"):
-        UseCases.interactive_train(setup, f"../output/Tiny_Model_{i}_{setup.approx_size()}_params", 1, provider)
+        UseCases.interactive_bow_train(setup, f"../output/Tiny_Model_{i}_{setup.approx_size()}_params", 1, provider)
 
 def test_model(model_path: str):
     model = Saving.load_bow_model(model_path)

@@ -6,10 +6,6 @@ from machine_learning.MLInterface import MLInterface
 
 
 class BOWInterface(MLInterface):
-    def __init__(self, model: BoWModel) -> None:
-        super().__init__()
-        self._model = model
-
     def _generate_next_input(self, prev_input: MLInputTensor, out_fragment: MessageFragment) -> MLInputTensor:
         return BOWInputTensor.from_previous_output(prev_input, out_fragment)
 

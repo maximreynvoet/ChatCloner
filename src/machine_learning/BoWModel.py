@@ -47,8 +47,7 @@ class BoWModel(PytorchTextPredictor):
         return BOWOutputTensor(token_out, people_out)
 
     
-    @staticmethod
-    def loss(pred_out: MLOutputTensor, true_out: MLOutputTensor) -> torch.Tensor:
+    def loss(self, pred_out: MLOutputTensor, true_out: MLOutputTensor) -> torch.Tensor:
         """TODO mss niet in deze class ?
         TODO ook mss andere weights voor token / person error?
             En ook andere soort loss voor token of person (cross entropy, en een distance)
@@ -69,7 +68,7 @@ class BoWModel(PytorchTextPredictor):
             output_tensor = self.forward(input_tensor)
             truth_tensor = BOWOutputTensor.from_datapoint(dp)
             
-            loss += BoWModel.loss(output_tensor, truth_tensor).item()
+            loss += self.loss(output_tensor, truth_tensor).item()
             
         self.train(prev_state_training) # Reset state to what it was
         return loss

@@ -8,8 +8,7 @@ from utils.IntRange import IntRange
 
 class CBowInterFace(MLInterface):
     def __init__(self, model: CBowModel, allowed_token_range: IntRange) -> None:
-        super().__init__()
-        self._model = model
+        super().__init__(model)
         self._allowed_token_range = allowed_token_range
 
     def _generate_next_input(self, prev_input: CBOWInputTensor, out_fragment: MessageFragment) -> MLInputTensor:

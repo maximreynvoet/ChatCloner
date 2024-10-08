@@ -9,6 +9,7 @@ from datatypes.Message import Message
 from datatypes.MessageFragment import MessageFragment
 from datatypes.datapoint import DataPoint
 from datatypes.tensors.ml_tensors import MLInputTensor, MLOutputTensor
+from machine_learning.TextPredictor import PytorchTextPredictor
 from machine_learning.predict_convo_params import PredictConvoParams
 from other.tokenizer import Tokenizer
 
@@ -22,9 +23,10 @@ class MLInterface:
     TODO ook moeten er hier dingen geimplementeerd worden
     """
 
-    def __init__(self) -> None:
+    def __init__(self, model: PytorchTextPredictor) -> None:
         self._tokenizer = Tokenizer.get_instance()
         self._nb_tokens = self._tokenizer.get_nb_tokens()
+        self._model = model
 
 
     def predict_convo_continuation(self, params: PredictConvoParams, conversation: Conversation) -> 'Conversation':
