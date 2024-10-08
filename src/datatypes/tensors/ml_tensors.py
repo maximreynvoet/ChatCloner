@@ -1,9 +1,12 @@
 from dataclasses import dataclass
+from typing import List
 
+from attr import dataclass
 import torch
 from datatypes.Message import Message
 from datatypes.MessageFragment import MessageFragment
 from datatypes.Person import PersonManager
+from datatypes.Token import Token
 from datatypes.datapoint import DataPoint
 from datatypes.tensors.use_case_tensors import TalkerProbabilityTensor, TokenCountTensor, TokenProbabilityTensor
 from datatypes.tensors.use_case_tensors import TalkerTensor
@@ -69,4 +72,14 @@ class BOWInputTensor(MLInputTensor):
         new_talker_tensor = TalkerTensor.from_idx(output_fragment.talker_id, PersonManager.get_nb_persons()).as_subclass(TalkerTensor)
 
         return BOWInputTensor(new_tokens_tensor, new_talker_tensor)
+
+
+@dataclass
+class CBOWInputTensor:
+    tokens: List[Token]
+
+
+@dataclass
+class CBOWOutputTensor:
+    token_prob: TokenProbabilityTensor
 

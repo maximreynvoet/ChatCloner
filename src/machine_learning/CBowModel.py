@@ -1,4 +1,9 @@
+from datatypes.tensors.ml_tensors import BOWInputTensor
+from datatypes.tensors.ml_tensors import CBOWInputTensor
+from datatypes.tensors.ml_tensors import CBOWOutputTensor
+from datatypes.tensors.use_case_tensors import TokenProbabilityTensor
 from machine_learning.TextPredictor import PytorchTextPredictor
+import torch.nn as nn
 
 """
 TODO organize
@@ -34,4 +39,16 @@ Kan ook kino zijn om meer te doen voor word representation learning
 
 """
 class CBowModel(PytorchTextPredictor):
-    ...
+    
+    def __init__(self, nb_tokens: int, embedding_size: int) -> None:
+        super(CBowModel, self).__init__()
+        self._nb_tokens = nb_tokens
+        self._embedding_size = embedding_size
+        self._embedder = nn.Embedding(nb_tokens, embedding_size)
+        self._ffc = nn.Linear(self._embedding_size, self._nb_tokens)
+
+    def forward(self, dp: CBOWInputTensor) -> CBOWOutputTensor:
+        embeddings = [self._embedder(t) for t in dp.tokens]
+        embedding_sum = sum(embeddings)
+        token_distribution = self._ffc(embedding_sum)
+        return CBOWOutputTensor(TokenProbabilityTensor(token_distribution))
