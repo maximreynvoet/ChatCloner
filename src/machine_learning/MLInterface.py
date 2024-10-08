@@ -57,6 +57,53 @@ class MLInterface:
     def _generate_next_input(self, prev_input: MLInputTensor, out_fragment: MessageFragment) -> MLInputTensor:
         ...
 
+    def train_model(self, data_provider: DatapointProvider, num_epochs: int, training_observer: TrainingObserver) -> List[float]:
+        "Trains the model and reports the losses from all datapoints"
+        optimizer = optim.Adam(self.parameters(), lr=0.001)
+        self.train()  # Set the model to training mode
+        losses = []
+
+        for epoch in tqdm(range(num_epochs), "Training epoch"):
+            
+            for dp in tqdm(data_provider, "Training on datapoint"):
+                training_observer.at_new_training_instance(self)
+                optimizer.zero_grad()  # Clear the gradients
+                
+                # Forward pass: compute predicted outputs by passing inputs to the model
+                input_tensor = BOWInputTensor.from_datapoint(dp)
+                output_tensor = self.forward(input_tensor)
+                truth_tensor = BOWOutputTensor.from_datapoint(dp)
+                
+                loss = BoWModel.loss(output_tensor, truth_tensor)
+                loss.backward()
+                
+                optimizer.step()
+                
+                # Accumulate the loss for reporting
+                losses.append(loss.item())
+        return losses
+    
+    def estimate_loss(self, test_set: DatapointProvider) -> float:
+        prev_state_training = self.training
+        self.eval()
+       
+        loss = 0
+        for dp in tqdm(test_set, "Evaluating loss"):
+            # Forward pass: compute predicted outputs by passing inputs to the model
+            input_tensor = BOWInputTensor.from_datapoint(dp)
+            output_tensor = self.forward(input_tensor)
+            truth_tensor = BOWOutputTensor.from_datapoint(dp)
+            
+            loss += BoWModel.loss(output_tensor, truth_tensor).item()
+            
+        self.train(prev_state_training) # Reset state to what it was
+        return loss
+    
+    def predict_output(self, input: CBOWInputTensor) -> CBOWOutputTensor:
+        self._model.eval()
+        return self._model(input)
+
+
 
     #
     # TRANSLATING

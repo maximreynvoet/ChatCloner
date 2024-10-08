@@ -16,6 +16,4 @@ class BOWInterface(MLInterface):
     def _dp_to_model_in(self, dp: DataPoint) -> MLInputTensor:
         return BOWInputTensor.from_datapoint(dp)
 
-    def predict_output(self, input: MLInputTensor) -> MLOutputTensor:
-        self._model.eval()
-        return self._model(input)
+

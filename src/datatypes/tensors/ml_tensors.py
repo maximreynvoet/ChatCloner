@@ -73,13 +73,15 @@ class BOWInputTensor(MLInputTensor):
 
         return BOWInputTensor(new_tokens_tensor, new_talker_tensor)
 
-
 @dataclass
-class CBOWInputTensor:
+class CBOWInputTensor(MLInputTensor):
     tokens: List[Token]
 
+    def plus_previous_output(self, output: MessageFragment) -> 'CBOWInputTensor':
+        token = Token(output.token_id)
+        return CBOWInputTensor(self.tokens + [token])
 
 @dataclass
-class CBOWOutputTensor:
-    token_prob: TokenProbabilityTensor
+class CBOWOutputTensor(TokenProbabilityTensor):
+    ...
 
